@@ -4,6 +4,7 @@ namespace ThalysJuvenal\FilamentAnimalia;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Support\Facades\FilamentAsset;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\HtmlString;
 use InvalidArgumentException;
@@ -31,6 +32,8 @@ final class AnimaliaTheme implements Plugin
     private ?string $fontUrl = null;
 
     private ?string $fontProvider = null;
+
+    private bool $precompiledCss = true;
 
     public static function make(): static
     {
@@ -83,6 +86,18 @@ final class AnimaliaTheme implements Plugin
         return $this;
     }
 
+    public function withoutPrecompiledCss(bool $condition = true): static
+    {
+        $this->precompiledCss = ! $condition;
+
+        return $this;
+    }
+
+    public function usesPrecompiledCss(): bool
+    {
+        return $this->precompiledCss;
+    }
+
     public function getPrimaryColor(): string
     {
         return $this->primaryColor;
@@ -126,7 +141,14 @@ final class AnimaliaTheme implements Plugin
 
     public function renderHead(): string
     {
-        return TokenStylesheet::render($this->sidebar, $this->density, $this->radius);
+        $head = TokenStylesheet::render($this->sidebar, $this->density, $this->radius);
+
+        if ($this->usesPrecompiledCss()) {
+            $href = e(FilamentAsset::getStyleHref('animalia-core', self::PACKAGE));
+            $head .= '<link rel="stylesheet" href="'.$href.'" data-navigate-track>';
+        }
+
+        return $head;
     }
 
     public function register(Panel $panel): void

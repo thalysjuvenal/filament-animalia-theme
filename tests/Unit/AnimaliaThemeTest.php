@@ -40,3 +40,10 @@ it('accepts enums or strings for appearance options', function () {
         ->and($theme->getRadius()->value)->toBe('lg')
         ->and($theme->getPrimaryColor())->toBe('brand-01');
 });
+
+it('omits links but keeps tokens without precompiled CSS', function () {
+    $head = AnimaliaTheme::make()->withoutPrecompiledCss()->renderHead();
+
+    expect($head)->toContain('data-animalia-tokens');
+    expect($head)->not->toContain('<link');
+});
