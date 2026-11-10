@@ -16,6 +16,7 @@ use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
@@ -25,6 +26,7 @@ use Workbench\App\Providers\WorkbenchPanelProvider;
 class TestCase extends Orchestra
 {
     use LazilyRefreshDatabase;
+    use WithLaravelMigrations;
     use WithWorkbench;
 
     /**
@@ -50,11 +52,6 @@ class TestCase extends Orchestra
             FilamentAnimaliaServiceProvider::class,
             WorkbenchPanelProvider::class,
         ];
-    }
-
-    protected function defineDatabaseMigrations(): void
-    {
-        $this->loadLaravelMigrations();
     }
 
     /**

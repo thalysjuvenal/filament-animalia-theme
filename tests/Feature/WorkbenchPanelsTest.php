@@ -10,7 +10,7 @@ it('serves every demo panel login', function (string $panel) {
 })->with(['admin', 'light', 'indigo', 'plain']);
 
 it('applies the configured sidebar variant per panel', function (string $panel, string $bg) {
-    actingAs(new User(['name' => 'T', 'email' => 't@example.com', 'password' => bcrypt('x')]));
+    actingAs(User::query()->create(['name' => 'T', 'email' => 't@example.com', 'password' => bcrypt('x')]));
 
     get("/{$panel}")->assertOk()->assertSee("--ani-sidebar-bg:{$bg};", false);
 })->with([['admin', 'var(--primary-950)'], ['light', 'white'], ['indigo', 'var(--primary-600)']]);
