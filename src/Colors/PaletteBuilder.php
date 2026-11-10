@@ -75,15 +75,7 @@ final class PaletteBuilder
             $hue -= 360;
         }
 
-        return 'oklch('.self::format(($l1 + $l2) / 2).' '.self::format(($c1 + $c2) / 2).' '.self::format($hue).')';
-    }
-
-    /**
-     * Rounds to 3 decimals from the exact binary value (like JS toFixed) and drops trailing zeros.
-     */
-    private static function format(float $value): string
-    {
-        return (string) (float) sprintf('%.3f', $value);
+        return 'oklch('.round(($l1 + $l2) / 2, 3).' '.round(($c1 + $c2) / 2, 3).' '.round($hue, 3).')';
     }
 
     /**
