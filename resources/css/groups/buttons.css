@@ -8,19 +8,29 @@
  */
 
 .fi-btn {
+    font-weight: 600;
+    padding-block: var(--ani-space-control-y);
+}
+
+/*
+ * Geometry, border and shadow apply to standalone buttons only: buttons inside
+ * `.fi-btn-group` (button groups, ToggleButtons) keep Filament's group rounding,
+ * separators and ring. Dropping Filament's `shadow-sm` on standalone buttons is
+ * intentional: AnimaliaDS buttons are flat.
+ */
+.fi-btn:not(.fi-btn-group > .fi-btn) {
     border: var(--ani-border-width-button) solid transparent;
     border-radius: var(--ani-radius-control);
     box-shadow: none;
-    font-weight: 600;
-    padding-block: var(--ani-space-control-y);
 }
 
 .fi-btn:not(.fi-size-xs, .fi-size-sm) {
     padding-inline: var(--ani-space-control-x);
 }
 
+/* Filament draws its focus ring through `--tw-ring-shadow`; zero it so the outline is the single indicator. */
 .fi-btn:focus-visible {
-    box-shadow: none;
+    --tw-ring-shadow: 0 0 transparent;
     outline: 2px solid var(--ani-focus-ring);
     outline-offset: 2px;
 }
@@ -100,7 +110,7 @@
     background-color: var(--ani-primary-subtle-bg);
 }
 
-/* Disabled: the repeated class raises specificity above every color/hover rule above. */
+/* Disabled: the repeated class lifts specificity to 5, above the highest color/hover rule here (4, e.g. outlined + color + :hover). */
 .fi-btn.fi-btn.fi-btn.fi-btn.fi-disabled,
 .fi-btn.fi-btn.fi-btn.fi-btn:disabled,
 .fi-btn.fi-btn.fi-btn.fi-btn[disabled] {

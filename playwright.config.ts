@@ -28,7 +28,7 @@ export default defineConfig({
     reporter: [['list']],
     snapshotPathTemplate: `tests/Browser/__screenshots__/filament-${major}/{projectName}/{arg}{ext}`,
     expect: {
-        toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled' },
+        toHaveScreenshot: { maxDiffPixels: 50, animations: 'disabled' },
     },
     webServer: {
         command: 'php vendor/bin/testbench serve --host=0.0.0.0 --port=8123',

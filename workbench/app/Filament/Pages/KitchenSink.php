@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
@@ -34,7 +35,7 @@ class KitchenSink extends Page
 
     public function mount(): void
     {
-        $this->data = ['invalid' => 'abc'];
+        $this->data = ['invalid' => 'abc', 'billing' => 'yearly', 'billing_grouped' => 'yearly'];
 
         $this->addError('data.invalid', 'Valor inválido');
     }
@@ -64,6 +65,10 @@ class KitchenSink extends Page
                 Action::make('groupOne')->label('Item um'),
                 Action::make('groupTwo')->label('Item dois'),
             ]),
+            ActionGroup::make([
+                Action::make('bgOne')->label('Dia'),
+                Action::make('bgTwo')->label('Semana'),
+            ])->buttonGroup(),
             Action::make('tooltip')->label('Com dica')->tooltip('Dica'),
         ];
     }
@@ -81,6 +86,8 @@ class KitchenSink extends Page
                         Toggle::make('active')->label('Ativo'),
                         Checkbox::make('terms')->label('Aceito os termos'),
                         Radio::make('plan')->label('Plano')->options(['basic' => 'Básico', 'pro' => 'Profissional']),
+                        ToggleButtons::make('billing')->label('Cobrança')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline(),
+                        ToggleButtons::make('billing_grouped')->label('Cobrança agrupada')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline()->grouped(),
                         DatePicker::make('date')->label('Data'),
                         Textarea::make('notes')->label('Observações'),
                         TextInput::make('invalid')->label('Campo inválido'),
