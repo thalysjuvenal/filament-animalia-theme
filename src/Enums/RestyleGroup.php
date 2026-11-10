@@ -5,6 +5,7 @@ namespace ThalysJuvenal\FilamentAnimalia\Enums;
 enum RestyleGroup: string
 {
     case Buttons = 'buttons';
+    case Forms = 'forms';
 
     public function assetId(): string
     {

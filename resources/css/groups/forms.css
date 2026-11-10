@@ -1,0 +1,157 @@
+/*
+ * AnimaliaDS restyle group: form fields.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Filament draws
+ * input borders and focus rings with box-shadow rings, so they are neutralized
+ * here: wrappers get a real border and exactly one focus outline. ToggleButtons
+ * are `.fi-btn` and belong to the buttons group.
+ */
+
+/* Input wrapper: text input, select, date picker, textarea. */
+.fi-input-wrp {
+    background-color: var(--ani-surface);
+    border: var(--ani-border-width-control) solid var(--ani-border-input);
+    border-radius: var(--ani-radius-control);
+    box-shadow: none;
+}
+
+/* The wrapper owns the single focus indicator; mirror Filament's exclusions (disabled, inline actions focused). */
+.fi-input-wrp:where(:not(.fi-disabled, :has(.fi-input-wrp-actions :focus))):focus-within {
+    --tw-ring-shadow: 0 0 transparent;
+    border-color: var(--ani-focus-ring);
+    outline: 1px solid var(--ani-focus-ring);
+}
+
+.fi-input-wrp.fi-invalid,
+.fi-input-wrp:where(:not(.fi-disabled, :has(.fi-input-wrp-actions :focus))).fi-invalid:focus-within {
+    border-color: var(--ani-danger-text);
+}
+
+.fi-input-wrp:where(:not(.fi-disabled, :has(.fi-input-wrp-actions :focus))).fi-invalid:focus-within {
+    outline-color: var(--ani-danger-text);
+}
+
+.fi-input-wrp.fi-disabled {
+    background-color: var(--ani-disabled-bg);
+}
+
+.fi-input,
+.fi-select-input {
+    color: var(--ani-text);
+}
+
+.fi-input::placeholder {
+    color: var(--ani-text-muted);
+}
+
+.fi-input:disabled,
+.fi-select-input:disabled {
+    color: var(--ani-disabled-text);
+    -webkit-text-fill-color: var(--ani-disabled-text);
+}
+
+/* Checkbox and radio. Filament draws the border as a ring, the focus as a ring. */
+input[type='checkbox'].fi-checkbox-input,
+input[type='radio'].fi-radio-input {
+    background-color: var(--ani-surface);
+    border: var(--ani-border-width-control) solid var(--ani-border-input);
+    box-shadow: none;
+}
+
+input[type='checkbox'].fi-checkbox-input {
+    border-radius: min(var(--ani-radius-control), 2px);
+}
+
+input[type='checkbox'].fi-checkbox-input:focus-visible,
+input[type='radio'].fi-radio-input:focus-visible,
+input[type='checkbox'].fi-checkbox-input:focus,
+input[type='radio'].fi-radio-input:focus {
+    --tw-ring-shadow: 0 0 transparent;
+    box-shadow: none;
+}
+
+input[type='checkbox'].fi-checkbox-input:focus-visible,
+input[type='radio'].fi-radio-input:focus-visible {
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: 2px;
+}
+
+input[type='checkbox'].fi-checkbox-input:checked,
+input[type='checkbox'].fi-checkbox-input:indeterminate,
+input[type='radio'].fi-radio-input:checked {
+    background-color: var(--ani-primary);
+    border-color: var(--ani-primary);
+}
+
+input[type='checkbox'].fi-checkbox-input.fi-invalid,
+input[type='radio'].fi-radio-input.fi-invalid {
+    border-color: var(--ani-danger-text);
+}
+
+input[type='checkbox'].fi-checkbox-input:disabled,
+input[type='radio'].fi-radio-input:disabled {
+    background-color: var(--ani-disabled-bg);
+    border-color: var(--ani-disabled-bg);
+}
+
+/*
+ * Filament paints the check mark and radio dot as a white background-image, which
+ * would be unreadable on the light primary used in dark mode. There, redraw the same
+ * shapes dark (the glyph cannot read CSS variables from inside a data URI).
+ */
+.dark input[type='checkbox'].fi-checkbox-input:checked:not(:disabled) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
+}
+
+.dark input[type='checkbox'].fi-checkbox-input:indeterminate:not(:disabled) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.5 6.75a1.25 1.25 0 0 0 0 2.5h7a1.25 1.25 0 0 0 0-2.5h-7z'/%3E%3C/svg%3E");
+}
+
+.dark input[type='radio'].fi-radio-input:checked:not(:disabled) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+}
+
+/* Toggle switch: off = input border color, on = primary; the thumb uses the surface color to stay visible on both. */
+.fi-toggle {
+    background-color: var(--ani-border-input);
+    border-color: transparent;
+}
+
+.fi-toggle.fi-toggle-on,
+.fi-toggle.fi-color.fi-toggle-on {
+    background-color: var(--ani-primary);
+}
+
+.fi-toggle > :first-child {
+    background-color: var(--ani-surface);
+}
+
+.fi-toggle:focus-visible {
+    --tw-ring-shadow: 0 0 transparent;
+    box-shadow: none;
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: 2px;
+}
+
+.fi-toggle:disabled,
+.fi-toggle[disabled] {
+    background-color: var(--ani-disabled-bg);
+}
+
+/* Labels, helper text and errors. */
+.fi-fo-field-label-content {
+    color: var(--ani-text);
+    font-weight: 600;
+}
+
+.fi-fo-field-label-content .fi-fo-field-label-required-mark {
+    color: var(--ani-danger-text);
+}
+
+.fi-fo-field-content-col .fi-sc-text:not(.fi-badge, .fi-color) {
+    color: var(--ani-text-muted);
+}
+
+.fi-fo-field-wrp-error-message {
+    color: var(--ani-danger-text);
+}
