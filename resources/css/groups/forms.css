@@ -95,9 +95,12 @@ input[type='radio'].fi-radio-input:disabled {
 }
 
 /*
+ * Documented exception to the token-only rule: `fill='black'` below.
  * Filament paints the check mark and radio dot as a white background-image, which
- * would be unreadable on the light primary used in dark mode. There, redraw the same
- * shapes dark (the glyph cannot read CSS variables from inside a data URI).
+ * is unreadable on the light primary used in dark mode. A data-URI SVG cannot read
+ * CSS custom properties and an <input> has no pseudo-elements for a token-driven
+ * mask, so the same shapes are redrawn dark. Black stands in for `--ani-on-primary`
+ * (primary-950), at about 8:1 on the dark primary.
  */
 .dark input[type='checkbox'].fi-checkbox-input:checked:not(:disabled) {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");

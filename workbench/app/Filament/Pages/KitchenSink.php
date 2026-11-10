@@ -35,7 +35,7 @@ class KitchenSink extends Page
 
     public function mount(): void
     {
-        $this->data = ['invalid' => 'abc', 'billing' => 'yearly', 'billing_grouped' => 'yearly'];
+        $this->data = ['invalid' => 'abc', 'billing' => 'yearly', 'billing_grouped' => 'yearly', 'plan' => 'basic', 'news' => true, 'notifications' => true];
 
         $this->addError('data.invalid', 'Valor inválido');
     }
@@ -84,7 +84,9 @@ class KitchenSink extends Page
                         TextInput::make('name')->label('Nome')->required()->helperText('Texto de ajuda do campo'),
                         Select::make('role')->label('Perfil')->options(['a' => 'Administrador', 'b' => 'Editor']),
                         Toggle::make('active')->label('Ativo'),
+                        Toggle::make('notifications')->label('Notificações'),
                         Checkbox::make('terms')->label('Aceito os termos'),
+                        Checkbox::make('news')->label('Receber novidades'),
                         Radio::make('plan')->label('Plano')->options(['basic' => 'Básico', 'pro' => 'Profissional']),
                         ToggleButtons::make('billing')->label('Cobrança')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline(),
                         ToggleButtons::make('billing_grouped')->label('Cobrança agrupada')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline()->grouped(),
