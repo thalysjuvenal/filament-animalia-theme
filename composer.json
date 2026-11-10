@@ -1,0 +1,63 @@
+{
+    "name": "thalysjuvenal/filament-animalia-theme",
+    "description": "FilamentPHP 4/5 theme plugin applying the AnimaliaDS design system.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thalys"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0|^5.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.7|^4.0",
+        "pestphp/pest-plugin-arch": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThalysJuvenal\\FilamentAnimalia\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ThalysJuvenal\\FilamentAnimalia\\Tests\\": "tests/",
+            "ThalysJuvenal\\FilamentAnimalia\\Scripts\\": "scripts/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "@build",
+            "@php vendor/bin/testbench serve --host=127.0.0.1 --port=8123"
+        ],
+        "test": "pest --parallel",
+        "analyse": "phpstan analyse",
+        "lint": "pint"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ThalysJuvenal\\FilamentAnimalia\\FilamentAnimaliaServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,1 +1,8 @@
 .superpowers/
+vendor/
+composer.lock
+node_modules/
+.phpunit.cache/
+test-results/
+playwright-report/
+tests/Browser/.auth/
