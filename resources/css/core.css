@@ -4,14 +4,13 @@
  * Intentionally unlayered: Filament's own styles live in cascade layers, and
  * unlayered rules always win over layered ones, so no forced-priority hacks are needed.
  * Only logical properties and var(--ani-*) tokens are allowed here.
+ *
+ * Focus styling is deliberately not set globally: Filament already draws its
+ * own focus rings (inputs, checkboxes, toggles, buttons). Focus is restyled in
+ * the restyle groups that own each component.
  */
 
 .fi-body {
     background-color: var(--ani-page-bg);
     color: var(--ani-text);
-}
-
-:where(.fi) :focus-visible {
-    outline: 2px solid var(--ani-focus-ring);
-    outline-offset: 2px;
 }
