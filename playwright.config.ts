@@ -2,12 +2,20 @@ import { execSync } from 'node:child_process';
 import { defineConfig } from '@playwright/test';
 
 function filamentMajor(): string {
-    const version = execSync(
-        `php -r "require 'vendor/autoload.php'; echo Composer\\InstalledVersions::getPrettyVersion('filament/filament');"`,
-        { encoding: 'utf8' },
-    ).trim();
+    try {
+        const version = execSync(
+            `php -r "require 'vendor/autoload.php'; echo Composer\\InstalledVersions::getPrettyVersion('filament/filament');"`,
+            { encoding: 'utf8' },
+        ).trim();
 
-    return version.replace(/^v/, '').split('.')[0];
+        return version.replace(/^v/, '').split('.')[0];
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+
+        throw new Error(
+            `Could not detect the Filament version - run \`composer install\` first (needs php and vendor/). Original error: ${message}`,
+        );
+    }
 }
 
 const major = filamentMajor();

@@ -59,7 +59,7 @@ class KitchenSink extends Page
             Action::make('modal')->label('Abrir modal')->requiresConfirmation(),
             Action::make('notify')
                 ->label('Notificar')
-                ->action(fn () => Notification::make()->title('Pedido salvo')->success()->send()),
+                ->action(fn () => Notification::make()->title('Pedido salvo')->success()->persistent()->send()),
             ActionGroup::make([
                 Action::make('groupOne')->label('Item um'),
                 Action::make('groupTwo')->label('Item dois'),
