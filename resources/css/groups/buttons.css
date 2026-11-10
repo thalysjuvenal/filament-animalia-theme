@@ -16,9 +16,10 @@
  * Geometry, border and shadow apply to standalone buttons only: buttons inside
  * `.fi-btn-group` (button groups, ToggleButtons) keep Filament's group rounding,
  * separators and ring. Dropping Filament's `shadow-sm` on standalone buttons is
- * intentional: AnimaliaDS buttons are flat.
+ * intentional: AnimaliaDS buttons are flat. `:where()` keeps this base at specificity
+ * (0,1,0) so variant rules below only need to set `border-color`.
  */
-.fi-btn:not(.fi-btn-group > .fi-btn) {
+.fi-btn:where(:not(.fi-btn-group > .fi-btn)) {
     border: var(--ani-border-width-button) solid transparent;
     border-radius: var(--ani-radius-control);
     box-shadow: none;
@@ -29,24 +30,25 @@
 }
 
 /* Filament draws its focus ring through `--tw-ring-shadow`; zero it so the outline is the single indicator. */
-.fi-btn:focus-visible {
+.fi-btn:focus-visible,
+.fi-fo-toggle-buttons-input:focus-visible + .fi-btn {
     --tw-ring-shadow: 0 0 transparent;
     outline: 2px solid var(--ani-focus-ring);
     outline-offset: 2px;
 }
 
 /* Primary */
-.fi-btn.fi-color-primary:not(.fi-outlined) {
+.fi-btn.fi-color-primary:not(.fi-outlined):where(:not(label, [aria-pressed])) {
     background-color: var(--ani-primary);
     color: var(--ani-on-primary);
 }
 
-.fi-btn.fi-color-primary:not(.fi-outlined):hover {
+.fi-btn.fi-color-primary:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
     background-color: var(--ani-primary-hover);
     color: var(--ani-on-primary);
 }
 
-.fi-btn.fi-color-primary:not(.fi-outlined):active {
+.fi-btn.fi-color-primary:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
     background-color: var(--ani-primary-pressed);
 }
 
@@ -62,12 +64,12 @@
 }
 
 /* Danger */
-.fi-btn.fi-color-danger:not(.fi-outlined) {
+.fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])) {
     background-color: var(--ani-danger);
     color: var(--ani-on-danger);
 }
 
-.fi-btn.fi-color-danger:not(.fi-outlined):hover {
+.fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
     background-color: var(--ani-danger);
     color: var(--ani-on-danger);
 }
@@ -79,20 +81,20 @@
 }
 
 /* Success, warning and info (solid) */
-.fi-btn.fi-color-success:not(.fi-outlined),
-.fi-btn.fi-color-success:not(.fi-outlined):hover {
+.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])),
+.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
     background-color: var(--ani-success);
     color: var(--ani-on-success);
 }
 
-.fi-btn.fi-color-warning:not(.fi-outlined),
-.fi-btn.fi-color-warning:not(.fi-outlined):hover {
+.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])),
+.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
     background-color: var(--ani-warning);
     color: var(--ani-on-warning);
 }
 
-.fi-btn.fi-color-info:not(.fi-outlined),
-.fi-btn.fi-color-info:not(.fi-outlined):hover {
+.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])),
+.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
     background-color: var(--ani-info);
     color: var(--ani-on-info);
 }
@@ -110,10 +112,40 @@
     background-color: var(--ani-primary-subtle-bg);
 }
 
-/* Disabled: the repeated class lifts specificity to 5, above the highest color/hover rule here (4, e.g. outlined + color + :hover). */
-.fi-btn.fi-btn.fi-btn.fi-btn.fi-disabled,
-.fi-btn.fi-btn.fi-btn.fi-btn:disabled,
-.fi-btn.fi-btn.fi-btn.fi-btn[disabled] {
+/*
+ * ToggleButtons: each option is either a `button[aria-pressed]` (default) or a
+ * `label.fi-btn` after a hidden radio/checkbox. Filament carries the selected
+ * state in those, so the fills above skip them and the state is expressed here:
+ * selected = primary fill, unselected = neutral.
+ */
+.fi-fo-toggle-buttons-input:not(:checked) + .fi-btn:not(.fi-outlined),
+.fi-btn[aria-pressed='false']:not(.fi-outlined) {
+    background-color: var(--ani-surface);
+    border-color: var(--ani-border-input);
+    color: var(--ani-text);
+}
+
+.fi-fo-toggle-buttons-input:not(:checked) + .fi-btn:not(.fi-outlined):hover,
+.fi-btn[aria-pressed='false']:not(.fi-outlined):hover {
+    background-color: var(--ani-primary-subtle-bg);
+}
+
+.fi-fo-toggle-buttons-input:checked + .fi-btn:not(.fi-outlined),
+.fi-btn[aria-pressed='true']:not(.fi-outlined) {
+    background-color: var(--ani-primary);
+    border-color: var(--ani-primary);
+    color: var(--ani-on-primary);
+}
+
+.fi-fo-toggle-buttons-input:checked + .fi-btn:not(.fi-outlined):hover,
+.fi-btn[aria-pressed='true']:not(.fi-outlined):hover {
+    background-color: var(--ani-primary-hover);
+}
+
+/* Disabled: the repeated class lifts specificity to 6, above the highest color/hover/toggle-state rule here (5). */
+.fi-btn.fi-btn.fi-btn.fi-btn.fi-btn.fi-disabled,
+.fi-btn.fi-btn.fi-btn.fi-btn.fi-btn:disabled,
+.fi-btn.fi-btn.fi-btn.fi-btn.fi-btn[disabled] {
     background-color: var(--ani-disabled-bg);
     border-color: transparent;
     color: var(--ani-disabled-text);
