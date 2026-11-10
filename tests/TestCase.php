@@ -20,6 +20,7 @@ use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use ThalysJuvenal\FilamentAnimalia\FilamentAnimaliaServiceProvider;
+use Workbench\App\Providers\WorkbenchPanelProvider;
 
 class TestCase extends Orchestra
 {
@@ -47,6 +48,7 @@ class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             FilamentAnimaliaServiceProvider::class,
+            WorkbenchPanelProvider::class,
         ];
     }
 
@@ -61,5 +63,6 @@ class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('database.default', 'testing');
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
     }
 }

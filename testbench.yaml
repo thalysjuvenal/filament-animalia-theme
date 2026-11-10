@@ -1,0 +1,6 @@
+providers:
+  - ThalysJuvenal\FilamentAnimalia\FilamentAnimaliaServiceProvider
+  - Workbench\App\Providers\WorkbenchPanelProvider
+
+workbench:
+  start: /admin
