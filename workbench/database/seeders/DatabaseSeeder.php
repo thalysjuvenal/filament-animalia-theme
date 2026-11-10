@@ -9,11 +9,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::query()->create([
+        $demo = new User([
             'name' => 'Demo',
             'email' => 'demo@example.com',
             'password' => 'password',
         ]);
+        $demo->created_at = '2026-01-01 09:00:00';
+        $demo->save();
 
         foreach (range(1, 25) as $n) {
             $number = str_pad((string) $n, 2, '0', STR_PAD_LEFT);

@@ -27,9 +27,7 @@ it('renders the users table', function () {
 });
 
 it('shows the demo stats on the dashboard', function () {
-    $name = Livewire::new(DemoStats::class)->getName();
-
-    get('/admin')->assertOk()->assertSee($name, false);
+    get('/admin')->assertOk()->assertSee('Pedidos')->assertSee('R$ 48.900', false);
 
     Livewire::test(DemoStats::class)->assertSee('Pedidos')->assertSee('Receita')->assertSee('Clientes');
 });

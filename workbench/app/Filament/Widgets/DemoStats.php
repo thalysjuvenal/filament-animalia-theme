@@ -7,6 +7,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DemoStats extends StatsOverviewWidget
 {
+    protected static bool $isLazy = false;
+
     /**
      * @return array<Stat>
      */
