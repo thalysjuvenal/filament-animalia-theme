@@ -41,6 +41,7 @@ class WorkbenchPanelProvider extends ServiceProvider
             ->login()
             ->discoverResources(in: dirname(__DIR__).'/Filament/Resources', for: 'Workbench\\App\\Filament\\Resources')
             ->discoverPages(in: dirname(__DIR__).'/Filament/Pages', for: 'Workbench\\App\\Filament\\Pages')
+            ->discoverWidgets(in: dirname(__DIR__).'/Filament/Widgets', for: 'Workbench\\App\\Filament\\Widgets')
             ->pages([
                 Dashboard::class,
             ])
