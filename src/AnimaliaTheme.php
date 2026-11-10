@@ -11,6 +11,7 @@ use InvalidArgumentException;
 use ThalysJuvenal\FilamentAnimalia\Colors\PaletteBuilder;
 use ThalysJuvenal\FilamentAnimalia\Enums\Density;
 use ThalysJuvenal\FilamentAnimalia\Enums\Radius;
+use ThalysJuvenal\FilamentAnimalia\Enums\RestyleGroup;
 use ThalysJuvenal\FilamentAnimalia\Enums\SidebarVariant;
 use ThalysJuvenal\FilamentAnimalia\Support\TokenStylesheet;
 use ThalysJuvenal\FilamentAnimalia\Tokens\AnimaliaTokens;
@@ -34,6 +35,14 @@ final class AnimaliaTheme implements Plugin
     private ?string $fontProvider = null;
 
     private bool $precompiledCss = true;
+
+    /** @var list<RestyleGroup> */
+    private array $restyleGroups;
+
+    public function __construct()
+    {
+        $this->restyleGroups = RestyleGroup::cases();
+    }
 
     public static function make(): static
     {
@@ -84,6 +93,33 @@ final class AnimaliaTheme implements Plugin
         $this->fontProvider = $provider;
 
         return $this;
+    }
+
+    /**
+     * Select which component groups are restyled to AnimaliaDS.
+     *
+     * @param  array<int, RestyleGroup|string>|null  $only  Defaults to every group.
+     * @param  array<int, RestyleGroup|string>  $except
+     */
+    public function restyle(?array $only = null, array $except = []): static
+    {
+        $onlyGroups = $only === null ? RestyleGroup::cases() : array_map(self::parseGroup(...), $only);
+        $exceptGroups = array_map(self::parseGroup(...), $except);
+
+        $this->restyleGroups = [...array_filter(
+            RestyleGroup::cases(),
+            fn (RestyleGroup $group): bool => in_array($group, $onlyGroups, true) && ! in_array($group, $exceptGroups, true),
+        )];
+
+        return $this;
+    }
+
+    /**
+     * @return list<RestyleGroup>
+     */
+    public function getRestyleGroups(): array
+    {
+        return $this->restyleGroups;
     }
 
     public function withoutPrecompiledCss(bool $condition = true): static
@@ -146,6 +182,11 @@ final class AnimaliaTheme implements Plugin
         if ($this->usesPrecompiledCss()) {
             $href = e(FilamentAsset::getStyleHref('animalia-core', self::PACKAGE));
             $head .= '<link rel="stylesheet" href="'.$href.'" data-navigate-track>';
+
+            foreach ($this->restyleGroups as $group) {
+                $groupHref = e(FilamentAsset::getStyleHref($group->assetId(), self::PACKAGE));
+                $head .= '<link rel="stylesheet" href="'.$groupHref.'" data-navigate-track>';
+            }
         }
 
         return $head;
@@ -163,6 +204,23 @@ final class AnimaliaTheme implements Plugin
     }
 
     public function boot(Panel $panel): void {}
+
+    private static function parseGroup(RestyleGroup|string $group): RestyleGroup
+    {
+        if ($group instanceof RestyleGroup) {
+            return $group;
+        }
+
+        $case = RestyleGroup::tryFrom($group);
+
+        if ($case === null) {
+            $valid = implode(', ', array_map(fn (RestyleGroup $g): string => $g->value, RestyleGroup::cases()));
+
+            throw new InvalidArgumentException("Unknown AnimaliaDS restyle group [{$group}]. Valid groups: {$valid}.");
+        }
+
+        return $case;
+    }
 
     /**
      * @template T of \BackedEnum

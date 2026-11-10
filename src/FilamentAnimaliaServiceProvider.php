@@ -5,6 +5,7 @@ namespace ThalysJuvenal\FilamentAnimalia;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
+use ThalysJuvenal\FilamentAnimalia\Enums\RestyleGroup;
 
 class FilamentAnimaliaServiceProvider extends ServiceProvider
 {
@@ -12,8 +13,14 @@ class FilamentAnimaliaServiceProvider extends ServiceProvider
     {
         // Loaded on request: only the plugin's render hook emits the link,
         // so panels without the plugin are not affected.
-        FilamentAsset::register([
+        $assets = [
             Css::make('animalia-core', __DIR__.'/../resources/css/core.css')->loadedOnRequest(),
-        ], AnimaliaTheme::PACKAGE);
+        ];
+
+        foreach (RestyleGroup::cases() as $group) {
+            $assets[] = Css::make($group->assetId(), __DIR__.'/../'.$group->stylesheetPath())->loadedOnRequest();
+        }
+
+        FilamentAsset::register($assets, AnimaliaTheme::PACKAGE);
     }
 }

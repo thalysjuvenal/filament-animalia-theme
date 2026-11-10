@@ -1,0 +1,129 @@
+/*
+ * AnimaliaDS restyle group: buttons and links.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Filament
+ * draws borders and focus indicators with box-shadow rings, so they are
+ * neutralized here: buttons use a real border and exactly one focus outline.
+ * Colors are expressed by Filament as `fi-color` + `fi-color-{name}`.
+ */
+
+.fi-btn {
+    border: var(--ani-border-width-button) solid transparent;
+    border-radius: var(--ani-radius-control);
+    box-shadow: none;
+    font-weight: 600;
+    padding-block: var(--ani-space-control-y);
+}
+
+.fi-btn:not(.fi-size-xs, .fi-size-sm) {
+    padding-inline: var(--ani-space-control-x);
+}
+
+.fi-btn:focus-visible {
+    box-shadow: none;
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Primary */
+.fi-btn.fi-color-primary:not(.fi-outlined) {
+    background-color: var(--ani-primary);
+    color: var(--ani-on-primary);
+}
+
+.fi-btn.fi-color-primary:not(.fi-outlined):hover {
+    background-color: var(--ani-primary-hover);
+    color: var(--ani-on-primary);
+}
+
+.fi-btn.fi-color-primary:not(.fi-outlined):active {
+    background-color: var(--ani-primary-pressed);
+}
+
+/* Secondary (outlined primary) */
+.fi-btn.fi-outlined.fi-color-primary {
+    background-color: transparent;
+    border-color: var(--ani-link);
+    color: var(--ani-link);
+}
+
+.fi-btn.fi-outlined.fi-color-primary:hover {
+    background-color: var(--ani-primary-subtle-bg);
+}
+
+/* Danger */
+.fi-btn.fi-color-danger:not(.fi-outlined) {
+    background-color: var(--ani-danger);
+    color: var(--ani-on-danger);
+}
+
+.fi-btn.fi-color-danger:not(.fi-outlined):hover {
+    background-color: var(--ani-danger);
+    color: var(--ani-on-danger);
+}
+
+.fi-btn.fi-outlined.fi-color-danger {
+    background-color: transparent;
+    border-color: var(--ani-danger-text);
+    color: var(--ani-danger-text);
+}
+
+/* Success, warning and info (solid) */
+.fi-btn.fi-color-success:not(.fi-outlined),
+.fi-btn.fi-color-success:not(.fi-outlined):hover {
+    background-color: var(--ani-success);
+    color: var(--ani-on-success);
+}
+
+.fi-btn.fi-color-warning:not(.fi-outlined),
+.fi-btn.fi-color-warning:not(.fi-outlined):hover {
+    background-color: var(--ani-warning);
+    color: var(--ani-on-warning);
+}
+
+.fi-btn.fi-color-info:not(.fi-outlined),
+.fi-btn.fi-color-info:not(.fi-outlined):hover {
+    background-color: var(--ani-info);
+    color: var(--ani-on-info);
+}
+
+/* Neutral (Cancel): AnimaliaDS has no gray button, so it becomes a neutral secondary. */
+.fi-btn.fi-color-gray,
+.fi-btn:not(.fi-color) {
+    background-color: var(--ani-surface);
+    border-color: var(--ani-border-input);
+    color: var(--ani-text);
+}
+
+.fi-btn.fi-color-gray:hover,
+.fi-btn:not(.fi-color):hover {
+    background-color: var(--ani-primary-subtle-bg);
+}
+
+/* Disabled: the repeated class raises specificity above every color/hover rule above. */
+.fi-btn.fi-btn.fi-btn.fi-btn.fi-disabled,
+.fi-btn.fi-btn.fi-btn.fi-btn:disabled,
+.fi-btn.fi-btn.fi-btn.fi-btn[disabled] {
+    background-color: var(--ani-disabled-bg);
+    border-color: transparent;
+    color: var(--ani-disabled-text);
+    opacity: 1;
+}
+
+/* Tertiary (links) */
+.fi-link {
+    color: var(--ani-link);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.fi-link.fi-color-danger {
+    color: var(--ani-danger-text);
+}
+
+.fi-link:focus-visible {
+    box-shadow: none;
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: 2px;
+}

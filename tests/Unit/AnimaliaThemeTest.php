@@ -2,6 +2,7 @@
 
 use Filament\Panel;
 use ThalysJuvenal\FilamentAnimalia\AnimaliaTheme;
+use ThalysJuvenal\FilamentAnimalia\Enums\RestyleGroup;
 
 it('registers Animalia palettes on the panel', function () {
     $panel = Panel::make()->id('t')->plugin(AnimaliaTheme::make());
@@ -46,4 +47,23 @@ it('omits links but keeps tokens without precompiled CSS', function () {
 
     expect($head)->toContain('data-animalia-tokens');
     expect($head)->not->toContain('<link');
+});
+
+it('enables every restyle group by default', function () {
+    expect(AnimaliaTheme::make()->getRestyleGroups())->toBe(RestyleGroup::cases());
+});
+
+it('filters groups with only/except', function () {
+    expect(AnimaliaTheme::make()->restyle(except: ['buttons'])->getRestyleGroups())->not->toContain(RestyleGroup::Buttons)
+        ->and(AnimaliaTheme::make()->restyle(only: [RestyleGroup::Buttons])->getRestyleGroups())->toBe([RestyleGroup::Buttons]);
+});
+
+it('rejects unknown groups', function () {
+    AnimaliaTheme::make()->restyle(only: ['tabless']);
+})->throws(InvalidArgumentException::class, 'tabless');
+
+it('links enabled group stylesheets only', function () {
+    expect(AnimaliaTheme::make()->renderHead())->toContain('animalia-buttons.css')
+        ->and(AnimaliaTheme::make()->restyle(except: ['buttons'])->renderHead())->not->toContain('animalia-buttons.css')
+        ->and(AnimaliaTheme::make()->withoutPrecompiledCss()->renderHead())->not->toContain('animalia-buttons.css');
 });
