@@ -1,0 +1,15 @@
+providers:
+  - ThalysJuvenal\FilamentAnimalia\FilamentAnimaliaServiceProvider
+  - Workbench\App\Providers\WorkbenchPanelProvider
+
+env:
+  - AUTH_MODEL=Workbench\App\Models\User
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: /admin
+  build:
+    - create-sqlite-db
+    - migrate:fresh

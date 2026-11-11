@@ -1,0 +1,112 @@
+/*
+ * AnimaliaDS restyle group: modals, slide-overs, dropdowns and tooltips.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Only colors, borders,
+ * radius and shadows are set here. Filament draws the modal and dropdown edges with
+ * box-shadow rings, which the shadow tokens replace. Modal and slide-over radius follows
+ * where Filament itself rounds the window: a centered modal on every corner, a slide-over
+ * only on the side facing the page, and a full-screen modal not at all.
+ */
+
+.fi-modal-window {
+    background-color: var(--ani-surface-raised);
+    border: 1px solid var(--ani-border);
+    box-shadow: var(--ani-shadow-xl);
+}
+
+/* Centered modal (not a slide-over, not full-screen): Filament rounds every corner. */
+.fi-modal:not(.fi-modal-slide-over):not(.fi-width-screen) > .fi-modal-window-ctn > .fi-modal-window {
+    border-radius: var(--ani-radius-container);
+}
+
+.fi-modal.fi-modal-has-sticky-header:not(.fi-modal-slide-over):not(.fi-width-screen) > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-header {
+    border-start-start-radius: var(--ani-radius-container);
+    border-start-end-radius: var(--ani-radius-container);
+}
+
+.fi-modal.fi-modal-has-sticky-footer:not(.fi-modal-slide-over):not(.fi-width-screen) > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-footer {
+    border-end-start-radius: var(--ani-radius-container);
+    border-end-end-radius: var(--ani-radius-container);
+}
+
+/* Sticky header and footer keep Filament's own white / gray-900 band; match the raised window surface (slide-overs included). */
+.fi-modal.fi-modal-has-sticky-header > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-header,
+.fi-modal.fi-modal-has-sticky-footer > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-footer {
+    background-color: var(--ani-surface-raised);
+}
+
+/* Slide-over: the window is pinned to one edge, so only the opposite (free) side is rounded. */
+.fi-modal.fi-modal-slide-over-from-end > .fi-modal-window-ctn > .fi-modal-window {
+    border-start-start-radius: var(--ani-radius-container);
+    border-end-start-radius: var(--ani-radius-container);
+}
+
+.fi-modal.fi-modal-slide-over-from-start > .fi-modal-window-ctn > .fi-modal-window {
+    border-start-end-radius: var(--ani-radius-container);
+    border-end-end-radius: var(--ani-radius-container);
+}
+
+.fi-dropdown-panel {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface-raised);
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-lg);
+}
+
+/* Filament pairs :hover with :focus-visible for keyboard navigation. */
+.fi-dropdown-list-item:not(.fi-disabled):not([disabled]):hover,
+.fi-dropdown-list-item:not(.fi-disabled):not([disabled]):focus-visible {
+    background-color: var(--ani-row-hover-bg);
+}
+
+/*
+ * Uncoloured item icons (no fi-color; Filament paints them gray-400 / gray-500) follow the muted text
+ * token at rest and on the hover/focus background. Coloured items keep Filament's colour.
+ */
+.fi-dropdown-list-item > .fi-icon:not(.fi-color) {
+    color: var(--ani-text-muted);
+}
+
+/* Filament removes the outline on items, so keyboard focus needs its own indicator. */
+.fi-dropdown-list-item:focus-visible {
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: -2px;
+}
+
+/*
+ * Tooltips are tippy.js boxes appended to <body>. Filament routes the box and arrow color
+ * through --tooltip-bg (the arrow of the bundled "light" theme uses it too), so overriding
+ * the property keeps the arrow in step with the box in both themes.
+ */
+.tippy-box {
+    --tooltip-bg: var(--ani-tooltip-bg);
+    background-color: var(--ani-tooltip-bg);
+    border-radius: var(--ani-radius-control);
+    color: var(--ani-tooltip-text);
+}
+
+/*
+ * Documented exception to the logical-properties rule: the `border-color` shorthand on
+ * the left and right placements below. Filament 4's bundled "light" theme paints the
+ * arrow with fixed per-placement colors and no custom property, so they are set here.
+ * Tippy placements are physical (the arrow points at a screen edge) and Filament does
+ * not mirror them in RTL, so a logical property would color the wrong side. The shorthand
+ * also avoids the physical per-side border color property names that
+ * CssConventionsTest forbids.
+ */
+.tippy-box[data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: var(--ani-tooltip-bg);
+}
+
+.tippy-box[data-placement^='bottom'] > .tippy-arrow::before {
+    border-bottom-color: var(--ani-tooltip-bg);
+}
+
+.tippy-box[data-placement^='left'] > .tippy-arrow::before {
+    border-color: transparent transparent transparent var(--ani-tooltip-bg);
+}
+
+.tippy-box[data-placement^='right'] > .tippy-arrow::before {
+    border-color: transparent var(--ani-tooltip-bg) transparent transparent;
+}

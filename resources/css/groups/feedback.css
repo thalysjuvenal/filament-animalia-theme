@@ -1,0 +1,164 @@
+/*
+ * AnimaliaDS restyle group: notifications, badges and the loading indicator.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Filament draws the toast
+ * and badge edges with box-shadow rings, which are neutralized here: Animalia is flat.
+ * Layout (display, size, spacing) is left to Filament. A notification exposes its status as
+ * `fi-status-{status}`; badges express colors as `fi-color` + `fi-color-{name}`, and only
+ * the listed colors are restyled (custom colors keep Filament's defaults).
+ */
+
+.fi-no-notification:not(.fi-inline) {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface-raised);
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-lg);
+}
+
+/* Filament tints colored notifications; the raised surface stays for every status. */
+.fi-no-notification.fi-color:not(.fi-inline) {
+    background-color: var(--ani-surface-raised);
+}
+
+/* No status, no accent border. */
+.fi-no-notification.fi-status-success:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-success-text);
+}
+
+.fi-no-notification.fi-status-danger:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-danger-text);
+}
+
+.fi-no-notification.fi-status-warning:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-warning-text);
+}
+
+.fi-no-notification.fi-status-info:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-info-text);
+}
+
+.fi-badge {
+    border-radius: var(--ani-radius-pill);
+    font-weight: 600;
+}
+
+/* xs badges are counters on buttons and links: they keep Filament's compact padding. */
+.fi-badge:not(.fi-size-xs) {
+    padding-block: 2px;
+    padding-inline: 8px;
+}
+
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary),
+.fi-badge:not(.fi-color) {
+    --tw-ring-shadow: 0 0 transparent;
+}
+
+.fi-badge.fi-color-success {
+    background-color: var(--ani-success-bg);
+    color: var(--ani-success-text);
+}
+
+.fi-badge.fi-color-danger {
+    background-color: var(--ani-danger-bg);
+    color: var(--ani-danger-text);
+}
+
+.fi-badge.fi-color-warning {
+    background-color: var(--ani-warning-bg);
+    color: var(--ani-warning-text);
+}
+
+.fi-badge.fi-color-info {
+    background-color: var(--ani-info-bg);
+    color: var(--ani-info-text);
+}
+
+.fi-badge.fi-color-primary {
+    background-color: var(--ani-primary-subtle-bg);
+    color: var(--ani-primary-subtle-text);
+}
+
+.fi-badge:not(.fi-color) {
+    background-color: var(--ani-neutral-subtle-bg);
+    color: var(--ani-neutral-subtle-text);
+}
+
+/* Badge icons follow the badge text color. */
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary) .fi-icon,
+.fi-badge:not(.fi-color) .fi-icon {
+    color: inherit;
+}
+
+/*
+ * The delete glyph is a mask painted in currentColor: it follows the badge text at full strength.
+ * It is not dimmed like Filament does, because dimming drops it below the 3:1 icon contrast on the
+ * lightest badge backgrounds; the text pair is tested at 4.5:1 or more.
+ */
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary) .fi-badge-delete-btn-icon,
+.fi-badge:not(.fi-color) .fi-badge-delete-btn-icon {
+    color: inherit;
+    opacity: 1;
+}
+
+/* The spinner paints in currentColor; inside a filled button it must keep that to stay visible. */
+.fi-loading-indicator:not(:where(.fi-btn, .fi-link, .fi-icon-btn, .fi-badge) *) {
+    color: var(--ani-primary);
+}
+
+/*
+ * Callout (Filament's alert): a bordered card like the toast. Filament marks a coloured
+ * callout with `fi-color` + `fi-color-{name}` (`->success()` and the other statuses are
+ * resolved to a colour); a gray or uncoloured callout gets no colour class and no accent.
+ * Only the status colors are restyled, other colors keep Filament's tint.
+ */
+.fi-callout {
+    --tw-ring-shadow: 0 0 transparent;
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: none;
+}
+
+.fi-callout:not(.fi-color) {
+    background-color: var(--ani-surface);
+}
+
+.fi-callout.fi-color-success {
+    background-color: var(--ani-success-bg);
+    border-inline-start: 4px solid var(--ani-success-text);
+}
+
+.fi-callout.fi-color-danger {
+    background-color: var(--ani-danger-bg);
+    border-inline-start: 4px solid var(--ani-danger-text);
+}
+
+.fi-callout.fi-color-warning {
+    background-color: var(--ani-warning-bg);
+    border-inline-start: 4px solid var(--ani-warning-text);
+}
+
+.fi-callout.fi-color-info {
+    background-color: var(--ani-info-bg);
+    border-inline-start: 4px solid var(--ani-info-text);
+}
+
+.fi-callout:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info) .fi-callout-heading {
+    font-weight: 600;
+}
+
+.fi-callout.fi-color-success :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-success-text);
+}
+
+.fi-callout.fi-color-danger :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-danger-text);
+}
+
+.fi-callout.fi-color-warning :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-warning-text);
+}
+
+.fi-callout.fi-color-info :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-info-text);
+}

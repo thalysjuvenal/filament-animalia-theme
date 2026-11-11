@@ -1,0 +1,151 @@
+<?php
+
+use ThalysJuvenal\FilamentAnimalia\Scripts\SyncTokens;
+
+/** @var list<string> $syncTokensDirs */
+$syncTokensDirs = [];
+
+/** @param array<string, mixed> $document */
+function syncTokensJson(string $file, array $document): void
+{
+    if (! is_dir(dirname($file))) {
+        mkdir(dirname($file), 0777, true);
+    }
+
+    file_put_contents($file, json_encode($document));
+}
+
+function syncTokensGit(string $dir): void
+{
+    $git = 'git -C '.escapeshellarg($dir).' -c user.name=test -c user.email=test@example.invalid'
+        .' -c commit.gpgsign=false -c core.hooksPath=/dev/null';
+
+    foreach (['init -q', 'add -A', 'commit --allow-empty -q -m init'] as $step) {
+        exec("{$git} {$step} 2>&1", $output, $status);
+        if ($status !== 0) {
+            throw new RuntimeException("Fixture git step failed ({$step}): ".implode("\n", $output));
+        }
+    }
+}
+
+/**
+ * @param  array<array-key, string>  $values
+ * @return array<array-key, array{value: string}>
+ */
+function syncTokensLeaves(array $values): array
+{
+    return array_map(fn (string $value): array => ['value' => $value], $values);
+}
+
+/**
+ * @param  list<string>  $dirs
+ * @return array{0: string, 1: string, 2: string}
+ */
+function syncTokensFixture(array &$dirs, bool $git = true): array
+{
+    $base = sys_get_temp_dir().'/sync-tokens-'.bin2hex(random_bytes(4));
+    $dirs[] = $base;
+
+    $brand = $base.'/brand';
+    $design = $base.'/design';
+    $colors = $brand.'/src/tokens/colors';
+
+    $family = ['lightest' => '#ebebf5', 'lighter' => '#c2c2e5'];
+
+    syncTokensJson($colors.'/brand/brand-01.json', ['color' => ['brand-01' => syncTokensLeaves(['lighter' => '#c2c2e5'])]]);
+    syncTokensJson($colors.'/brand/brand-02.json', ['color' => ['brand-02' => syncTokensLeaves($family)]]);
+    syncTokensJson($colors.'/neutral/light.json', ['color' => ['neutral' => ['light' => syncTokensLeaves(['00' => '#ffffff'])]]]);
+    syncTokensJson($colors.'/neutral/mid.json', ['color' => ['neutral' => ['mid' => syncTokensLeaves(['40' => '#9191a1'])]]]);
+    syncTokensJson($colors.'/neutral/dark.json', ['color' => ['neutral' => ['dark' => syncTokensLeaves(['95' => '#060613'])]]]);
+
+    foreach (['positive', 'negative', 'warning', 'info'] as $name) {
+        syncTokensJson($design.'/src/colors/feedback/'.$name.'.json', ['color' => ['feedback' => [$name => syncTokensLeaves($family)]]]);
+    }
+
+    syncTokensJson($design.'/src/border/radius.json', ['border' => ['radius' => syncTokensLeaves(['none' => 'none', 'sm' => '2px'])]]);
+    syncTokensJson($design.'/src/border/width.json', ['border' => ['width' => syncTokensLeaves(['sm' => '1px'])]]);
+    syncTokensJson($design.'/src/spacing/index.json', ['spacing' => syncTokensLeaves(['xs' => '0.5rem'])]);
+    syncTokensJson($design.'/src/spacing/squish.json', ['spacing' => ['squish' => syncTokensLeaves(['2xs' => '2px 4px'])]]);
+    syncTokensJson($design.'/src/shadow/index.json', ['shadow' => syncTokensLeaves(['none' => '0 0 0 rgb(255, 255, 255)', 'sm' => '0 1px 4px 0 rgba(0, 0, 0, 0.1)'])]);
+
+    if ($git) {
+        syncTokensGit($brand);
+        syncTokensGit($design);
+    }
+
+    return [$brand, $design, $base];
+}
+
+afterEach(function () use (&$syncTokensDirs) {
+    foreach ($syncTokensDirs as $dir) {
+        exec('rm -rf '.escapeshellarg($dir));
+    }
+    $syncTokensDirs = [];
+});
+
+it('flattens Style Dictionary files and uppercases hex', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs);
+
+    $tokens = (new SyncTokens($brandFixture, $designFixture))->build();
+
+    expect($tokens['color']['brand-01']['lighter'])->toBe('#C2C2E5')
+        ->and($tokens['color']['neutral'])->toHaveKeys(['00', '40', '95'])
+        ->and($tokens['color']['positive']['lightest'])->toBe('#EBEBF5')
+        ->and($tokens['shadow'])->not->toHaveKey('none')
+        ->and($tokens['squish'])->toBe(['2xs' => '2px 4px'])
+        ->and($tokens['source']['animalia-brand'])->toMatch('/^[0-9a-f]{40}$/');
+});
+
+it('throws when a source path is not a git repository', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs, git: false);
+
+    expect(fn () => (new SyncTokens($brandFixture, $designFixture))->build())
+        ->toThrow(RuntimeException::class, 'Could not resolve git revision');
+});
+
+it('throws naming a missing upstream file', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs);
+    unlink($brandFixture.'/src/tokens/colors/neutral/mid.json');
+
+    expect(fn () => (new SyncTokens($brandFixture, $designFixture))->build())
+        ->toThrow(RuntimeException::class, 'neutral/mid.json');
+});
+
+it('writes a header and a file that returns the built tokens', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture, $base] = syncTokensFixture($syncTokensDirs);
+    $target = $base.'/out.php';
+
+    $sync = new SyncTokens($brandFixture, $designFixture);
+    $sync->write($target);
+
+    expect(file_get_contents($target))->toContain('// Generated by scripts/sync-tokens — do not edit by hand.')
+        ->and(require $target)->toBe($sync->build());
+});
+
+it('throws when a neutral key is defined in more than one file', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs, git: false);
+    syncTokensJson($brandFixture.'/src/tokens/colors/neutral/dark.json', ['color' => ['neutral' => ['dark' => syncTokensLeaves(['40' => '#000000'])]]]);
+    syncTokensGit($brandFixture);
+    syncTokensGit($designFixture);
+
+    expect(fn () => (new SyncTokens($brandFixture, $designFixture))->build())
+        ->toThrow(RuntimeException::class, 'Neutral key "40"');
+});
+
+it('throws when the working tree is dirty', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs);
+    file_put_contents($brandFixture.'/untracked.txt', 'x');
+
+    expect(fn () => (new SyncTokens($brandFixture, $designFixture))->build())
+        ->toThrow(RuntimeException::class, 'not clean');
+});
+
+it('throws when the path is not the repository top level', function () use (&$syncTokensDirs) {
+    [$brandFixture, $designFixture] = syncTokensFixture($syncTokensDirs);
+
+    mkdir($brandFixture.'/sub');
+    symlink($brandFixture.'/src', $brandFixture.'/sub/src');
+
+    expect(fn () => (new SyncTokens($brandFixture.'/sub', $designFixture))->build())
+        ->toThrow(RuntimeException::class, 'top level');
+});

@@ -1,0 +1,13 @@
+{
+    "name": "filament-animalia-theme-visual",
+    "private": true,
+    "description": "Visual regression tests for the Animalia Filament theme.",
+    "scripts": {
+        "visual": "docker build -t animalia-visual tests/Browser && docker run --rm -v \"$PWD\":/app -w /app animalia-visual bash -lc \"composer build && php vendor/bin/testbench filament:assets --quiet && npx playwright test\"",
+        "visual:update": "docker build -t animalia-visual tests/Browser && docker run --rm -v \"$PWD\":/app -w /app animalia-visual bash -lc \"composer build && php vendor/bin/testbench filament:assets --quiet && npx playwright test --update-snapshots=all\""
+    },
+    "devDependencies": {
+        "@playwright/test": "1.65.0",
+        "@types/node": "^22.0.0"
+    }
+}

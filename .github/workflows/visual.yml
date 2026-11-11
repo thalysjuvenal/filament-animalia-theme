@@ -1,0 +1,72 @@
+name: visual
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: 'Update visual baselines'
+        type: boolean
+        default: false
+
+jobs:
+  visual:
+    name: Visual / Filament ${{ matrix.major }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { filament: '^4.0', major: '4' }
+          - { filament: '^5.0', major: '5' }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # The Docker image runs PHP 8.4 and reuses the host vendor/ directory.
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: sqlite3, pdo_sqlite, mbstring, intl
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Require Filament ${{ matrix.filament }}
+        run: composer require "filament/filament:${{ matrix.filament }}" --no-update --no-interaction
+
+      - name: Install Composer dependencies
+        run: composer update --prefer-dist --no-interaction -W
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run visual regression
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.update_snapshots) }}
+        run: npm run visual
+
+      - name: Update visual baselines
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
+        run: npm run visual:update
+
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs-filament-${{ matrix.major }}
+          path: test-results/
+          if-no-files-found: warn
+
+      - name: Upload updated baselines
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-filament-${{ matrix.major }}
+          path: tests/Browser/__screenshots__/
