@@ -1,0 +1,182 @@
+/*
+ * AnimaliaDS restyle group: sidebar, topbar, breadcrumbs, tabs and the wizard stepper.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Only colors, borders,
+ * radius and typography are set here: display, position, width, z-index, transforms and
+ * transitions drive the sidebar collapse and the mobile overlay and are left to Filament.
+ * Sidebar colors come from the per-variant `--ani-sidebar-*` tokens.
+ */
+
+/* Sidebar surface. On desktop Filament makes it transparent; the variant background is the point of the variants. */
+.fi-sidebar,
+.fi-sidebar-header {
+    background-color: var(--ani-sidebar-bg);
+}
+
+.fi-sidebar {
+    border-inline-end: 1px solid var(--ani-sidebar-border);
+}
+
+/* Filament draws the mobile header edge with a ring; the sidebar owns its own surface now. */
+.fi-sidebar-header {
+    --tw-ring-shadow: 0 0 transparent;
+}
+
+.fi-sidebar .fi-logo {
+    color: var(--ani-sidebar-brand);
+}
+
+.fi-sidebar-footer {
+    border-block-start-color: var(--ani-sidebar-border);
+}
+
+.fi-sidebar-group-label {
+    color: var(--ani-sidebar-label);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Group header icons and the collapse chevron follow the sidebar text color. */
+.fi-sidebar-group-btn,
+.fi-sidebar-group-dropdown-trigger-btn,
+.fi-sidebar-group-collapse-btn {
+    color: var(--ani-sidebar-text);
+}
+
+.fi-sidebar-group-btn .fi-icon,
+.fi-sidebar-group-dropdown-trigger-btn .fi-icon,
+.fi-sidebar-group-collapse-btn .fi-icon {
+    color: inherit;
+}
+
+/* Items: label and icon inherit the button color, so hover and active only change one property. */
+.fi-sidebar-item-btn {
+    border-radius: var(--ani-radius-control);
+    color: var(--ani-sidebar-text);
+}
+
+.fi-sidebar-item-btn > .fi-icon,
+.fi-sidebar-item-btn > .fi-sidebar-item-label {
+    color: inherit;
+}
+
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+.fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible,
+.fi-sidebar-group-dropdown-trigger-btn:hover,
+.fi-sidebar-group-dropdown-trigger-btn:focus-visible {
+    background-color: var(--ani-sidebar-item-hover-bg);
+}
+
+/* Filament hides the outline on items and shows focus through the background only; keep a real indicator. */
+.fi-sidebar-item-btn:focus-visible,
+.fi-sidebar-group-dropdown-trigger-btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:focus-visible {
+    background-color: var(--ani-sidebar-item-active-bg);
+    color: var(--ani-sidebar-item-active-text);
+    font-weight: 600;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-grouped-border > .fi-sidebar-item-grouped-border-part {
+    background-color: var(--ani-sidebar-item-active-text);
+}
+
+/* Collapse, expand and close buttons that live inside the sidebar. */
+.fi-sidebar-close-collapse-sidebar-btn,
+.fi-sidebar-open-collapse-sidebar-btn,
+.fi-sidebar-close-sidebar-btn,
+.fi-sidebar-open-sidebar-btn {
+    color: var(--ani-sidebar-text);
+}
+
+.fi-sidebar-close-collapse-sidebar-btn .fi-icon,
+.fi-sidebar-open-collapse-sidebar-btn .fi-icon,
+.fi-sidebar-close-sidebar-btn .fi-icon,
+.fi-sidebar-open-sidebar-btn .fi-icon {
+    color: inherit;
+}
+
+/* Topbar: Filament's ring and shadow are replaced by a single bottom border. */
+.fi-topbar {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface);
+    border-block-end: 1px solid var(--ani-border);
+    box-shadow: none;
+}
+
+/* Breadcrumbs */
+.fi-breadcrumbs li {
+    color: var(--ani-text-muted);
+}
+
+.fi-breadcrumbs li a {
+    color: var(--ani-text-muted);
+}
+
+.fi-breadcrumbs li a:hover {
+    color: var(--ani-text);
+}
+
+.fi-breadcrumbs li:last-child,
+.fi-breadcrumbs li:last-child a {
+    color: var(--ani-text);
+}
+
+/* Tabs: underline style. Filament's active background pill is neutralized so only the underline marks the active tab. */
+.fi-tabs-item {
+    border-block-end: 2px solid transparent;
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+}
+
+.fi-tabs-item:focus-visible {
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: -2px;
+}
+
+.fi-tabs-item .fi-tabs-item-label {
+    color: var(--ani-text-muted);
+}
+
+.fi-tabs-item.fi-active {
+    background-color: transparent;
+    border-block-end-color: var(--ani-link);
+}
+
+.fi-tabs-item.fi-active .fi-tabs-item-label,
+.fi-tabs-item.fi-active > .fi-icon {
+    color: var(--ani-link);
+}
+
+/* Wizard stepper: active and completed steps are filled, pending steps are outlined. */
+.fi-sc-wizard-header-step-icon-ctn {
+    border-color: var(--ani-border-input);
+}
+
+.fi-sc-wizard-header-step .fi-sc-wizard-header-step-label {
+    color: var(--ani-text-muted);
+}
+
+.fi-sc-wizard-header-step.fi-active .fi-sc-wizard-header-step-icon-ctn,
+.fi-sc-wizard-header-step.fi-completed .fi-sc-wizard-header-step-icon-ctn {
+    background-color: var(--ani-primary);
+    border-color: var(--ani-primary);
+}
+
+.fi-sc-wizard-header-step.fi-active .fi-sc-wizard-header-step-number,
+.fi-sc-wizard-header-step.fi-active .fi-sc-wizard-header-step-icon-ctn .fi-icon,
+.fi-sc-wizard-header-step.fi-completed .fi-sc-wizard-header-step-icon-ctn .fi-icon {
+    color: var(--ani-on-primary);
+}
+
+.fi-sc-wizard-header-step.fi-active .fi-sc-wizard-header-step-label,
+.fi-sc-wizard-header-step.fi-completed .fi-sc-wizard-header-step-label {
+    color: var(--ani-link);
+}
