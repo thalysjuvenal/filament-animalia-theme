@@ -148,77 +148,82 @@
 }
 
 /*
- * Brand corner: on desktop the topbar segment above the sidebar is painted with the sidebar color, so the
- * brand reads as part of the sidebar. The topbar divider switches to the sidebar border color over the corner. Backgrounds and borders only; no layout property is touched. The gradient stops at
- * Filament's own sidebar width variable. Not painted on mobile (the sidebar is an overlay), with top
- * navigation, or while a collapsible sidebar is collapsed (the brand would overflow the narrow rail).
+ * Brand corner: on desktop the topbar segment above the sidebar is painted with the sidebar color, so
+ * the brand reads as part of the sidebar. Backgrounds and borders only; no layout property is touched.
+ * Each sidebar state sets `--ani-corner-width` on the body (Filament's own width variables) and its own
+ * brand colors; the single paint rule below consumes it. Where the variable is unset (mobile overlay,
+ * top navigation, fully collapsible sidebar while closed) the gradients are invalid and nothing is
+ * painted, so the normal topbar divider shows.
+ * - Expanded: the corner spans the sidebar; the logo and the collapse button use the brand color.
+ * - Collapsed rail (collapsible on desktop): the corner covers the rail and the expand button uses the
+ *   brand color. Filament still shows the logo in the topbar, starting at about 4rem, so the corner is
+ *   capped there: the logo stays on the light topbar with its default color and is never clipped.
+ * The topbar divider follows the sidebar border color over the corner.
  */
 @media (min-width: 64rem) {
-    :is(
-            .fi-body.fi-body-has-navigation:not(
-                    .fi-body-has-top-navigation,
+    .fi-body.fi-body-has-navigation:not(.fi-body-has-top-navigation):is(
+            :not(
                     .fi-body-has-sidebar-collapsible-on-desktop,
                     .fi-body-has-sidebar-fully-collapsible-on-desktop
                 ),
-            .fi-body.fi-body-has-navigation:not(.fi-body-has-top-navigation):is(
-                    .fi-body-has-sidebar-collapsible-on-desktop,
-                    .fi-body-has-sidebar-fully-collapsible-on-desktop
-                ):has(.fi-sidebar-open)
-        )
-        .fi-topbar {
-        background-image: linear-gradient(
-            to right,
-            var(--ani-sidebar-bg) var(--sidebar-width),
-            transparent var(--sidebar-width)
-        );
-        border-image: linear-gradient(
-                to right,
-                var(--ani-sidebar-border) var(--sidebar-width),
-                var(--ani-border) var(--sidebar-width)
-            )
-            1;
+            :has(.fi-sidebar-open)
+        ) {
+        --ani-corner-width: var(--sidebar-width);
     }
 
-    [dir='rtl']
-    :is(
-            .fi-body.fi-body-has-navigation:not(
-                    .fi-body-has-top-navigation,
+    .fi-body.fi-body-has-navigation:not(.fi-body-has-top-navigation):is(
+            :not(
                     .fi-body-has-sidebar-collapsible-on-desktop,
                     .fi-body-has-sidebar-fully-collapsible-on-desktop
                 ),
-            .fi-body.fi-body-has-navigation:not(.fi-body-has-top-navigation):is(
-                    .fi-body-has-sidebar-collapsible-on-desktop,
-                    .fi-body-has-sidebar-fully-collapsible-on-desktop
-                ):has(.fi-sidebar-open)
-        )
-        .fi-topbar {
-        background-image: linear-gradient(
-            to left,
-            var(--ani-sidebar-bg) var(--sidebar-width),
-            transparent var(--sidebar-width)
-        );
-        border-image: linear-gradient(
-                to left,
-                var(--ani-sidebar-border) var(--sidebar-width),
-                var(--ani-border) var(--sidebar-width)
-            )
-            1;
-    }
-
-    :is(
-            .fi-body.fi-body-has-navigation:not(
-                    .fi-body-has-top-navigation,
-                    .fi-body-has-sidebar-collapsible-on-desktop,
-                    .fi-body-has-sidebar-fully-collapsible-on-desktop
-                ),
-            .fi-body.fi-body-has-navigation:not(.fi-body-has-top-navigation):is(
-                    .fi-body-has-sidebar-collapsible-on-desktop,
-                    .fi-body-has-sidebar-fully-collapsible-on-desktop
-                ):has(.fi-sidebar-open)
+            :has(.fi-sidebar-open)
         )
         .fi-topbar-start
         :is(.fi-logo, .fi-topbar-close-collapse-sidebar-btn, .fi-topbar-close-collapse-sidebar-btn .fi-icon) {
         color: var(--ani-sidebar-brand);
+    }
+
+    .fi-body.fi-body-has-navigation.fi-body-has-sidebar-collapsible-on-desktop:not(
+            .fi-body-has-top-navigation,
+            .fi-body-has-sidebar-fully-collapsible-on-desktop
+        ):not(:has(.fi-sidebar-open)) {
+        --ani-corner-width: min(var(--sidebar-collapsed-width), 4rem);
+    }
+
+    .fi-body.fi-body-has-navigation.fi-body-has-sidebar-collapsible-on-desktop:not(
+            .fi-body-has-top-navigation,
+            .fi-body-has-sidebar-fully-collapsible-on-desktop
+        ):not(:has(.fi-sidebar-open))
+        :is(.fi-topbar-open-collapse-sidebar-btn, .fi-topbar-open-collapse-sidebar-btn .fi-icon) {
+        color: var(--ani-sidebar-brand);
+    }
+
+    .fi-topbar {
+        background-image: linear-gradient(
+            to right,
+            var(--ani-sidebar-bg) var(--ani-corner-width),
+            transparent var(--ani-corner-width)
+        );
+        border-image: linear-gradient(
+                to right,
+                var(--ani-sidebar-border) var(--ani-corner-width),
+                var(--ani-border) var(--ani-corner-width)
+            )
+            1;
+    }
+
+    [dir='rtl'] .fi-topbar {
+        background-image: linear-gradient(
+            to left,
+            var(--ani-sidebar-bg) var(--ani-corner-width),
+            transparent var(--ani-corner-width)
+        );
+        border-image: linear-gradient(
+                to left,
+                var(--ani-sidebar-border) var(--ani-corner-width),
+                var(--ani-border) var(--ani-corner-width)
+            )
+            1;
     }
 }
 
