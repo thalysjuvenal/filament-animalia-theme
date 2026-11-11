@@ -1,0 +1,99 @@
+/*
+ * AnimaliaDS restyle group: notifications, badges and the loading indicator.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Filament draws the toast
+ * and badge edges with box-shadow rings, which are neutralized here: Animalia is flat.
+ * Layout (display, size, spacing) is left to Filament. A notification exposes its status as
+ * `fi-status-{status}`; badges express colors as `fi-color` + `fi-color-{name}`, and only
+ * the listed colors are restyled (custom colors keep Filament's defaults).
+ */
+
+.fi-no-notification:not(.fi-inline) {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface-raised);
+    border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-lg);
+}
+
+/* Filament tints colored notifications; the raised surface stays for every status. */
+.fi-no-notification.fi-color {
+    background-color: var(--ani-surface-raised);
+}
+
+/* No status, no accent border. */
+.fi-no-notification.fi-status-success:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-success-text);
+}
+
+.fi-no-notification.fi-status-danger:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-danger-text);
+}
+
+.fi-no-notification.fi-status-warning:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-warning-text);
+}
+
+.fi-no-notification.fi-status-info:not(.fi-inline) {
+    border-inline-start: 4px solid var(--ani-info-text);
+}
+
+.fi-badge {
+    border-radius: var(--ani-radius-pill);
+    font-weight: 600;
+    padding-block: 2px;
+    padding-inline: 8px;
+}
+
+.fi-badge.fi-color-success,
+.fi-badge.fi-color-danger,
+.fi-badge.fi-color-warning,
+.fi-badge.fi-color-info,
+.fi-badge.fi-color-primary,
+.fi-badge.fi-color-gray {
+    --tw-ring-shadow: 0 0 transparent;
+}
+
+.fi-badge.fi-color-success {
+    background-color: var(--ani-success-bg);
+    color: var(--ani-success-text);
+}
+
+.fi-badge.fi-color-danger {
+    background-color: var(--ani-danger-bg);
+    color: var(--ani-danger-text);
+}
+
+.fi-badge.fi-color-warning {
+    background-color: var(--ani-warning-bg);
+    color: var(--ani-warning-text);
+}
+
+.fi-badge.fi-color-info {
+    background-color: var(--ani-info-bg);
+    color: var(--ani-info-text);
+}
+
+.fi-badge.fi-color-primary {
+    background-color: var(--ani-primary-subtle-bg);
+    color: var(--ani-primary-subtle-text);
+}
+
+.fi-badge.fi-color-gray {
+    background-color: var(--ani-neutral-subtle-bg);
+    color: var(--ani-neutral-subtle-text);
+}
+
+/* Badge icons follow the badge text color. */
+.fi-badge.fi-color-success .fi-icon,
+.fi-badge.fi-color-danger .fi-icon,
+.fi-badge.fi-color-warning .fi-icon,
+.fi-badge.fi-color-info .fi-icon,
+.fi-badge.fi-color-primary .fi-icon,
+.fi-badge.fi-color-gray .fi-icon {
+    color: inherit;
+}
+
+/* The spinner paints in currentColor; inside a filled button it must keep that to stay visible. */
+.fi-loading-indicator:not(:where(.fi-btn, .fi-link, .fi-icon-btn, .fi-badge) *) {
+    color: var(--ani-primary);
+}
