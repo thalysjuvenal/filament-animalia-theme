@@ -8,6 +8,7 @@ enum RestyleGroup: string
     case Forms = 'forms';
     case Tables = 'tables';
     case Navigation = 'navigation';
+    case Overlays = 'overlays';
 
     public function assetId(): string
     {
