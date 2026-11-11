@@ -57,7 +57,7 @@ Todas as opções são opcionais e encadeáveis em `AnimaliaTheme::make()`.
 
 | Método | Aceita | Padrão | Descrição |
 |---|---|---|---|
-| `primaryColor()` | `'brand-01'`, `'brand-02'` ou um hex `#RRGGBB` | `'brand-01'` | Cor primária do painel. Qualquer outro valor lança `InvalidArgumentException`. |
+| `primaryColor()` | `'brand-01'`, `'brand-02'` ou um hex `#RRGGBB` | `'brand-01'` | Cor primária do painel. Qualquer outro valor lança `InvalidArgumentException`. O `brand-02` tem baixo contraste com texto branco, veja [Escopo da acessibilidade](#escopo-da-acessibilidade). |
 | `sidebar()` | `SidebarVariant` ou `'deep-indigo'`, `'light'`, `'indigo'` | `deep-indigo` | Esquema de cores da sidebar. |
 | `density()` | `Density` ou `'comfortable'`, `'compact'` | `comfortable` | Densidade de controles e espaçamentos. |
 | `radius()` | `Radius` ou `'none'`, `'sm'`, `'default'`, `'lg'` | `default` | Escala de raio de borda. |
@@ -74,7 +74,7 @@ use ThalysJuvenal\FilamentAnimalia\Enums\SidebarVariant;
 
 $panel->plugin(
     AnimaliaTheme::make()
-        ->primaryColor('brand-02')
+        ->primaryColor('brand-01')
         ->sidebar(SidebarVariant::Light)
         ->density(Density::Compact)
         ->radius('lg')
@@ -125,11 +125,31 @@ $panel
     ]);
 ```
 
-Apenas as chaves informadas são substituídas. `colors()` altera as paletas do Filament; os tokens `--ani-*` usados pelos estilos de restyle (sidebar, superfícies, bordas) não são afetados. Para mudar a cor primária de forma consistente, prefira `primaryColor()`.
+Apenas as chaves informadas são substituídas. Todo token de cor emitido pelo tema é uma referência a uma das paletas do Filament (`var(--{palette}-{shade})`), então sobrescrever uma paleta altera a cor de tudo o que é construído sobre ela:
+
+- `gray`: superfícies, bordas, texto e a sidebar `light`.
+- `primary`: as sidebars `deep-indigo` e `indigo`, o anel de foco e os links.
+- `danger`, `success`, `warning` e `info`: os badges, toasts e botões dessa cor.
+
+Depois que você sobrescreve uma paleta, a garantia de contraste descrita em [Escopo da acessibilidade](#escopo-da-acessibilidade) deixa de valer para tudo o que depende dela. Por exemplo, dar uma paleta âmbar ao `primary` transforma a sidebar padrão em um âmbar muito escuro. O `primaryColor()` é a forma do próprio plugin de definir a paleta primária; um hex informado via `primaryColor()` ou via `->colors()` se comporta da mesma maneira.
+
+## Logo da marca e o canto da sidebar
+
+Com o grupo de navegação reestilizado, o trecho da topbar acima da sidebar é pintado com a cor da sidebar no desktop. Com `deep-indigo` (o padrão) e `indigo`, esse trecho é escuro também no modo claro, então uma imagem passada em `->brandLogo()` pensada para uma topbar clara pode ficar invisível ali. O Filament só usa `->darkModeBrandLogo()` no modo escuro, então ele não resolve o modo claro. Escolha uma das opções:
+
+- use um logo que tenha boa leitura sobre a cor escura da sidebar;
+- use `->sidebar('light')`, em que o canto é branco no modo claro e `->darkModeBrandLogo()` cobre o modo escuro normalmente;
+- deixe o grupo de navegação de fora com `->restyle(except: ['navigation'])`.
 
 ## Escopo da acessibilidade
 
 A garantia de contraste WCAG AA cobre apenas os tokens semânticos do próprio tema; a suíte de testes os verifica. Cores que você define, via `primaryColor('#RRGGBB')` ou `->colors()`, são de sua responsabilidade. Por exemplo, a cor `brand-02` do AnimaliaDS, `#8DC897`, sobre branco tem apenas 1,94:1 (o WCAG AA exige 4,5:1 para texto normal), então não serve como texto sobre fundo branco.
+
+## Limitações conhecidas
+
+- **Cores de Toggle e ToggleButtons:** `Toggle::onColor()` / `offColor()` e o `->colors()` por opção do ToggleButtons não são estilizados pelo tema. Os toggles usam a cor primária do tema, e as opções selecionadas do ToggleButtons usam a primária.
+- **Densidade:** `density()` afeta botões de tamanho padrão (md), células de tabela e espaçamento de seções. Os campos de formulário mantêm os tamanhos do próprio Filament na v1.
+- **Ícones:** os ícones do Filament são mantidos, veja o início desta página.
 
 ## RTL
 

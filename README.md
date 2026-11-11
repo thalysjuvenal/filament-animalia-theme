@@ -57,7 +57,7 @@ All options are optional and chainable on `AnimaliaTheme::make()`.
 
 | Method | Accepts | Default | Description |
 |---|---|---|---|
-| `primaryColor()` | `'brand-01'`, `'brand-02'` or a `#RRGGBB` hex | `'brand-01'` | Panel primary colour. Anything else throws `InvalidArgumentException`. |
+| `primaryColor()` | `'brand-01'`, `'brand-02'` or a `#RRGGBB` hex | `'brand-01'` | Panel primary colour. Anything else throws `InvalidArgumentException`. `brand-02` has low contrast with white text, see [Accessibility scope](#accessibility-scope). |
 | `sidebar()` | `SidebarVariant` or `'deep-indigo'`, `'light'`, `'indigo'` | `deep-indigo` | Sidebar colour scheme. |
 | `density()` | `Density` or `'comfortable'`, `'compact'` | `comfortable` | Control and spacing density. |
 | `radius()` | `Radius` or `'none'`, `'sm'`, `'default'`, `'lg'` | `default` | Corner radius scale. |
@@ -74,7 +74,7 @@ use ThalysJuvenal\FilamentAnimalia\Enums\SidebarVariant;
 
 $panel->plugin(
     AnimaliaTheme::make()
-        ->primaryColor('brand-02')
+        ->primaryColor('brand-01')
         ->sidebar(SidebarVariant::Light)
         ->density(Density::Compact)
         ->radius('lg')
@@ -125,11 +125,31 @@ $panel
     ]);
 ```
 
-Only the keys you pass are replaced. `colors()` changes Filament's colour palettes; the `--ani-*` tokens used by the restyle stylesheets (sidebar, surfaces, borders) are not affected. To change the primary colour consistently, prefer `primaryColor()`.
+Only the keys you pass are replaced. Every colour token the theme emits is a reference to one of Filament's palettes (`var(--{palette}-{shade})`), so overriding a palette re-tints everything built on it:
+
+- `gray`: surfaces, borders, text and the `light` sidebar.
+- `primary`: the `deep-indigo` and `indigo` sidebars, the focus ring and links.
+- `danger`, `success`, `warning` and `info`: the badges, toasts and buttons of that colour.
+
+Once you override a palette, the contrast guarantee described in [Accessibility scope](#accessibility-scope) no longer applies to anything built on it. For example, giving `primary` an amber palette turns the default sidebar into a very dark amber. `primaryColor()` is the plugin's own way to set the primary palette; a hex passed through `primaryColor()` or through `->colors()` behaves the same.
+
+## Brand logo and the sidebar corner
+
+With the navigation group restyled, the topbar segment above the sidebar is painted with the sidebar colour on desktop. With `deep-indigo` (the default) and `indigo` that segment is dark in light mode too, so a `->brandLogo()` image designed for a light topbar can become invisible there. Filament only uses `->darkModeBrandLogo()` in dark mode, so it does not help in light mode. Choose one of:
+
+- supply a logo that reads well on the dark sidebar colour;
+- use `->sidebar('light')`, where the corner is white in light mode and `->darkModeBrandLogo()` covers dark mode as usual;
+- leave the navigation group out with `->restyle(except: ['navigation'])`.
 
 ## Accessibility scope
 
 The WCAG AA contrast guarantee covers the theme's own semantic tokens only; the test suite checks them. Colours you set yourself, through `primaryColor('#RRGGBB')` or `->colors()`, are your responsibility. For example, the AnimaliaDS `brand-02` colour `#8DC897` on white is only 1.94:1 (WCAG AA needs 4.5:1 for normal text), so it is not suitable as text on a white background.
+
+## Known limitations
+
+- **Toggle and ToggleButtons colours:** `Toggle::onColor()` / `offColor()` and the per-option `->colors()` of ToggleButtons are not themed. Toggles use the theme's primary colour, and selected ToggleButtons options use primary.
+- **Density:** `density()` affects default-size (md) buttons, table cells and section spacing. Form inputs keep Filament's own sizes in v1.
+- **Icons:** Filament's icons are kept, see the top of this page.
 
 ## RTL
 
