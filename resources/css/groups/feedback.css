@@ -97,7 +97,11 @@
     color: inherit;
 }
 
-/* The delete glyph is a mask painted in currentColor: it follows the badge text, dimmed like Filament does. */
+/*
+ * The delete glyph is a mask painted in currentColor: it follows the badge text at full strength.
+ * It is not dimmed like Filament does, because dimming drops it below the 3:1 icon contrast on the
+ * lightest badge backgrounds; the text pair is tested at 4.5:1 or more.
+ */
 .fi-badge.fi-color-success .fi-badge-delete-btn-icon,
 .fi-badge.fi-color-danger .fi-badge-delete-btn-icon,
 .fi-badge.fi-color-warning .fi-badge-delete-btn-icon,
@@ -105,22 +109,7 @@
 .fi-badge.fi-color-primary .fi-badge-delete-btn-icon,
 .fi-badge.fi-color-gray .fi-badge-delete-btn-icon {
     color: inherit;
-    opacity: 0.6;
-}
-
-.fi-badge.fi-color-success .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-danger .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-warning .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-info .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-primary .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-gray .fi-badge-delete-btn-icon:hover,
-.fi-badge.fi-color-success .fi-badge-delete-btn-icon:focus-visible,
-.fi-badge.fi-color-danger .fi-badge-delete-btn-icon:focus-visible,
-.fi-badge.fi-color-warning .fi-badge-delete-btn-icon:focus-visible,
-.fi-badge.fi-color-info .fi-badge-delete-btn-icon:focus-visible,
-.fi-badge.fi-color-primary .fi-badge-delete-btn-icon:focus-visible,
-.fi-badge.fi-color-gray .fi-badge-delete-btn-icon:focus-visible {
-    opacity: 0.9;
+    opacity: 1;
 }
 
 /* The spinner paints in currentColor; inside a filled button it must keep that to stay visible. */
