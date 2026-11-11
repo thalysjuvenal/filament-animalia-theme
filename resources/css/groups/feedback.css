@@ -16,7 +16,7 @@
 }
 
 /* Filament tints colored notifications; the raised surface stays for every status. */
-.fi-no-notification.fi-color {
+.fi-no-notification.fi-color:not(.fi-inline) {
     background-color: var(--ani-surface-raised);
 }
 
@@ -40,6 +40,10 @@
 .fi-badge {
     border-radius: var(--ani-radius-pill);
     font-weight: 600;
+}
+
+/* xs badges are counters on buttons and links: they keep Filament's compact padding. */
+.fi-badge:not(.fi-size-xs) {
     padding-block: 2px;
     padding-inline: 8px;
 }
@@ -91,6 +95,32 @@
 .fi-badge.fi-color-primary .fi-icon,
 .fi-badge.fi-color-gray .fi-icon {
     color: inherit;
+}
+
+/* The delete glyph is a mask painted in currentColor: it follows the badge text, dimmed like Filament does. */
+.fi-badge.fi-color-success .fi-badge-delete-btn-icon,
+.fi-badge.fi-color-danger .fi-badge-delete-btn-icon,
+.fi-badge.fi-color-warning .fi-badge-delete-btn-icon,
+.fi-badge.fi-color-info .fi-badge-delete-btn-icon,
+.fi-badge.fi-color-primary .fi-badge-delete-btn-icon,
+.fi-badge.fi-color-gray .fi-badge-delete-btn-icon {
+    color: inherit;
+    opacity: 0.6;
+}
+
+.fi-badge.fi-color-success .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-danger .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-warning .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-info .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-primary .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-gray .fi-badge-delete-btn-icon:hover,
+.fi-badge.fi-color-success .fi-badge-delete-btn-icon:focus-visible,
+.fi-badge.fi-color-danger .fi-badge-delete-btn-icon:focus-visible,
+.fi-badge.fi-color-warning .fi-badge-delete-btn-icon:focus-visible,
+.fi-badge.fi-color-info .fi-badge-delete-btn-icon:focus-visible,
+.fi-badge.fi-color-primary .fi-badge-delete-btn-icon:focus-visible,
+.fi-badge.fi-color-gray .fi-badge-delete-btn-icon:focus-visible {
+    opacity: 0.9;
 }
 
 /* The spinner paints in currentColor; inside a filled button it must keep that to stay visible. */

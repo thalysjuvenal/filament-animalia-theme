@@ -63,6 +63,8 @@ function semanticContrastPairs(): array
         $add("on-{$c}", $c, 4.5);
         $add("{$c}-text", "{$c}-bg", 4.5);
         $add("{$c}-text", 'surface', 4.5);
+        // Toast accent bar: a decorative status indicator next to an icon, so the non-text minimum applies.
+        $add("{$c}-text", 'surface-raised', 3.0);
     }
     $add('primary-subtle-text', 'primary-subtle-bg', 4.5);
     $add('neutral-subtle-text', 'neutral-subtle-bg', 4.5);
