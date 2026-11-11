@@ -19,7 +19,7 @@ final class Contrast
 
     private static function luminance(string $hex): float
     {
-        if (! preg_match('/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i', $hex, $m)) {
+        if (! preg_match('/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})\z/i', $hex, $m)) {
             throw new InvalidArgumentException("Invalid hex color '{$hex}', expected #RRGGBB.");
         }
 
