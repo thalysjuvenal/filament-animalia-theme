@@ -28,6 +28,12 @@
     border-end-end-radius: var(--ani-radius-container);
 }
 
+/* Sticky header and footer keep Filament's own white / gray-900 band; match the raised window surface (slide-overs included). */
+.fi-modal.fi-modal-has-sticky-header > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-header,
+.fi-modal.fi-modal-has-sticky-footer > .fi-modal-window-ctn > .fi-modal-window > .fi-modal-footer {
+    background-color: var(--ani-surface-raised);
+}
+
 /* Slide-over: the window is pinned to one edge, so only the opposite (free) side is rounded. */
 .fi-modal.fi-modal-slide-over-from-end > .fi-modal-window-ctn > .fi-modal-window {
     border-start-start-radius: var(--ani-radius-container);
@@ -65,7 +71,15 @@
     color: var(--ani-tooltip-text);
 }
 
-/* Filament 4's bundled "light" theme paints the arrow with fixed per-placement colors and no custom property, so set them here. Tippy placements are physical (the arrow points at a screen edge), hence the border-color shorthand for left and right. */
+/*
+ * Documented exception to the logical-properties rule: the `border-color` shorthand on
+ * the left and right placements below. Filament 4's bundled "light" theme paints the
+ * arrow with fixed per-placement colors and no custom property, so they are set here.
+ * Tippy placements are physical (the arrow points at a screen edge) and Filament does
+ * not mirror them in RTL, so a logical property would color the wrong side. The shorthand
+ * also avoids the physical per-side border color property names that
+ * CssConventionsTest forbids.
+ */
 .tippy-box[data-placement^='top'] > .tippy-arrow::before {
     border-top-color: var(--ani-tooltip-bg);
 }
