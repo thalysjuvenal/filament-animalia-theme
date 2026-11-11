@@ -9,15 +9,12 @@
  * Filament's own padding. Layout (display, position, width) is left to Filament.
  */
 
-/* Card: a contained section that is not aside (aside draws its card on the content container). Compact sections keep Filament's radius. */
+/* Card: a contained section that is not aside (aside draws its card on the content container). Every density gets the container radius; compact keeps Filament's padding only. */
 .fi-section:not(.fi-section-not-contained, .fi-aside) {
     --tw-ring-shadow: 0 0 transparent;
     border: 1px solid var(--ani-border);
-    box-shadow: var(--ani-shadow-sm);
-}
-
-.fi-section:not(.fi-section-not-contained, .fi-aside, .fi-compact) {
     border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-sm);
 }
 
 /* Secondary sections keep Filament's tinted background. */
@@ -28,11 +25,8 @@
 .fi-section.fi-aside:not(.fi-section-not-contained) > .fi-section-content-ctn {
     --tw-ring-shadow: 0 0 transparent;
     border: 1px solid var(--ani-border);
-    box-shadow: var(--ani-shadow-sm);
-}
-
-.fi-section.fi-aside:not(.fi-section-not-contained, .fi-compact) > .fi-section-content-ctn {
     border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-sm);
 }
 
 .fi-section.fi-aside:not(.fi-section-not-contained, .fi-secondary) > .fi-section-content-ctn {
@@ -55,7 +49,11 @@
     padding-inline: var(--ani-space-section);
 }
 
-/* Dividers inside contained sections: header bottom, footer top and divided rows. The colour deliberately applies to every variant, compact and aside included: ruling 3 protects geometry (padding, radius), not colour, and one consistent hairline is the goal. */
+/*
+ * Dividers inside contained sections: header bottom, footer top and divided rows. The colour
+ * deliberately applies to every variant, compact and aside included: compact keeps Filament's
+ * padding only, and one consistent hairline is the goal.
+ */
 .fi-section:not(.fi-section-not-contained, .fi-aside).fi-section-has-header > .fi-section-content-ctn {
     border-block-start-color: var(--ani-border);
 }
@@ -116,6 +114,8 @@
 /* Standalone empty state card; the table empty state lives inside the table container and is untouched. */
 .fi-empty-state:not(.fi-empty-state-not-contained) {
     --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface);
     border: 1px solid var(--ani-border);
     border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-sm);
 }

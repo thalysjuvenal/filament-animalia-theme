@@ -206,7 +206,7 @@
         ):not(:has(.fi-sidebar-open))
         .fi-topbar-start
         .fi-logo {
-        margin-inline-start: 2.25rem;
+        margin-inline-start: max(0.75rem, calc(var(--sidebar-collapsed-width) - 2.25rem));
     }
 
     .fi-topbar {

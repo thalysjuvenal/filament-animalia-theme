@@ -22,6 +22,7 @@ use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class KitchenSink extends Page
 {
@@ -52,19 +53,24 @@ class KitchenSink extends Page
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('primary')->label('Primário'),
+            Action::make('primary')->label('Primário')->icon(Heroicon::Plus),
             Action::make('secondary')->label('Secundário')->outlined(),
             Action::make('tertiary')->label('Terciário')->link(),
             Action::make('danger')->label('Perigo')->color('danger'),
             Action::make('dangerSecondary')->label('Perigo secundário')->color('danger')->outlined(),
+            Action::make('successSecondary')->label('Sucesso secundário')->color('success')->outlined(),
             Action::make('cancel')->label('Cancelar')->color('gray'),
-            Action::make('modal')->label('Abrir modal')->requiresConfirmation(),
+            Action::make('modal')
+                ->label('Abrir modal')
+                ->requiresConfirmation()
+                ->schema([TextInput::make('motivo')->label('Motivo')])
+                ->action(fn () => null),
             Action::make('notify')
                 ->label('Notificar')
                 ->action(fn () => Notification::make()->title('Pedido salvo')->success()->persistent()->send()),
             ActionGroup::make([
-                Action::make('groupOne')->label('Item um'),
-                Action::make('groupTwo')->label('Item dois'),
+                Action::make('groupOne')->label('Item um')->icon(Heroicon::PencilSquare),
+                Action::make('groupTwo')->label('Item dois')->icon(Heroicon::Trash)->color('danger'),
             ]),
             ActionGroup::make([
                 Action::make('bgOne')->label('Dia'),
@@ -89,7 +95,7 @@ class KitchenSink extends Page
                         Checkbox::make('terms')->label('Aceito os termos'),
                         Checkbox::make('news')->label('Receber novidades'),
                         Radio::make('plan')->label('Plano')->options(['basic' => 'Básico', 'pro' => 'Profissional']),
-                        ToggleButtons::make('billing')->label('Cobrança')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline(),
+                        ToggleButtons::make('billing')->label('Cobrança')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->icons(['monthly' => Heroicon::Calendar, 'yearly' => Heroicon::CheckCircle])->inline(),
                         ToggleButtons::make('billing_grouped')->label('Cobrança agrupada')->options(['monthly' => 'Mensal', 'yearly' => 'Anual', 'lifetime' => 'Vitalício'])->inline()->grouped(),
                         DatePicker::make('date')->label('Data'),
                         Textarea::make('notes')->label('Observações'),

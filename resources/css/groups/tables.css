@@ -30,6 +30,13 @@
     letter-spacing: inherit;
 }
 
+/* Header cells take the same inline padding as the data cells below them, so labels line up with their data. */
+.fi-ta-header-cell:where(
+        :not(.fi-ta-selection-cell, .fi-ta-group-selection-cell, .fi-ta-summary-header-cell, .fi-ta-individual-search-cell)
+    ) {
+    padding-inline: var(--ani-space-cell-x);
+}
+
 /* Data cells only: action, selection, reorder and summary cells keep Filament's own padding. */
 .fi-ta-cell:where(
         :not(

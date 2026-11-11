@@ -9,7 +9,6 @@
 
 .fi-btn {
     font-weight: 600;
-    padding-block: var(--ani-space-control-y);
 }
 
 /*
@@ -25,7 +24,9 @@
     box-shadow: none;
 }
 
-.fi-btn:not(.fi-size-xs, .fi-size-sm) {
+/* Density padding belongs to the default (md) size only; xs, sm, lg and xl keep Filament's own geometry. */
+.fi-btn:not(.fi-size-xs, .fi-size-sm, .fi-size-lg, .fi-size-xl) {
+    padding-block: var(--ani-space-control-y);
     padding-inline: var(--ani-space-control-x);
 }
 
@@ -63,40 +64,119 @@
     background-color: var(--ani-primary-subtle-bg);
 }
 
-/* Danger */
+/*
+ * Danger, success, warning and info (solid). Hover moves the fill one shade away from the label
+ * colour and pressed moves it two, so label contrast never drops: darker with a white label
+ * (light mode), lighter with a dark label (warning in light mode, every colour in dark mode).
+ */
 .fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])) {
     background-color: var(--ani-danger);
     color: var(--ani-on-danger);
 }
 
 .fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
-    background-color: var(--ani-danger);
+    background-color: var(--danger-700);
     color: var(--ani-on-danger);
 }
 
+.fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
+    background-color: var(--danger-800);
+}
+
+.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])) {
+    background-color: var(--ani-success);
+    color: var(--ani-on-success);
+}
+
+.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
+    background-color: var(--success-700);
+    color: var(--ani-on-success);
+}
+
+.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
+    background-color: var(--success-800);
+}
+
+.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])) {
+    background-color: var(--ani-warning);
+    color: var(--ani-on-warning);
+}
+
+.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
+    background-color: var(--warning-500);
+    color: var(--ani-on-warning);
+}
+
+.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
+    background-color: var(--warning-400);
+}
+
+.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])) {
+    background-color: var(--ani-info);
+    color: var(--ani-on-info);
+}
+
+.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
+    background-color: var(--info-700);
+    color: var(--ani-on-info);
+}
+
+.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
+    background-color: var(--info-800);
+}
+
+/* Dark mode: the fills are shade 400 with a 950 label, so hover and pressed go lighter (300, 200). */
+.dark .fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])):hover,
+.dark .fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):hover,
+.dark .fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):hover,
+.dark .fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
+    background-color: var(--color-300);
+}
+
+.dark .fi-btn.fi-color-danger:not(.fi-outlined):where(:not(label, [aria-pressed])):active,
+.dark .fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):active,
+.dark .fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):active,
+.dark .fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):active {
+    background-color: var(--color-200);
+}
+
+/* Outlined danger, success, warning and info use the feedback text token for border, label and icon. */
 .fi-btn.fi-outlined.fi-color-danger {
     background-color: transparent;
     border-color: var(--ani-danger-text);
     color: var(--ani-danger-text);
 }
 
-/* Success, warning and info (solid) */
-.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])),
-.fi-btn.fi-color-success:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
-    background-color: var(--ani-success);
-    color: var(--ani-on-success);
+.fi-btn.fi-outlined.fi-color-success {
+    background-color: transparent;
+    border-color: var(--ani-success-text);
+    color: var(--ani-success-text);
 }
 
-.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])),
-.fi-btn.fi-color-warning:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
-    background-color: var(--ani-warning);
-    color: var(--ani-on-warning);
+.fi-btn.fi-outlined.fi-color-warning {
+    background-color: transparent;
+    border-color: var(--ani-warning-text);
+    color: var(--ani-warning-text);
 }
 
-.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])),
-.fi-btn.fi-color-info:not(.fi-outlined):where(:not(label, [aria-pressed])):hover {
-    background-color: var(--ani-info);
-    color: var(--ani-on-info);
+.fi-btn.fi-outlined.fi-color-info {
+    background-color: transparent;
+    border-color: var(--ani-info-text);
+    color: var(--ani-info-text);
+}
+
+/* Any other outlined colour (the plugin's secondary, custom colours) gets Filament's own shade for the border. */
+.fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) {
+    border-color: var(--color-600);
+}
+
+.dark .fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) {
+    border-color: var(--color-400);
+}
+
+/* The outlined icon follows the label colour of the colours restyled above. */
+.fi-btn.fi-outlined:is(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info) > .fi-icon {
+    color: inherit;
 }
 
 /* Neutral (Cancel): AnimaliaDS has no gray button, so it becomes a neutral secondary. */
@@ -152,7 +232,19 @@
     opacity: 1;
 }
 
-/* Tertiary (links) */
+/*
+ * Icons follow the label colour. Filament computes the icon colour for its own shades (white
+ * on a 600 fill in dark mode), which no longer matches the fills and labels restyled here.
+ * This covers the loading spinner too, and is scoped to the colours this file restyles.
+ */
+.fi-btn:not(.fi-outlined):is(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info):where(:not(label, [aria-pressed])) > .fi-icon,
+.fi-fo-toggle-buttons-input:checked + .fi-btn:not(.fi-outlined) > .fi-icon,
+.fi-btn[aria-pressed='true']:not(.fi-outlined) > .fi-icon,
+.fi-btn:is(.fi-disabled, :disabled, [disabled]) > .fi-icon {
+    color: inherit;
+}
+
+/* Tertiary (links): colours map the way buttons do; gray links carry no `fi-color` class. */
 .fi-link {
     color: var(--ani-link);
     font-weight: 600;
@@ -160,8 +252,24 @@
     text-underline-offset: 2px;
 }
 
+.fi-link:not(.fi-color) {
+    color: var(--ani-text);
+}
+
+.fi-link.fi-color-success {
+    color: var(--ani-success-text);
+}
+
 .fi-link.fi-color-danger {
     color: var(--ani-danger-text);
+}
+
+.fi-link.fi-color-warning {
+    color: var(--ani-warning-text);
+}
+
+.fi-link.fi-color-info {
+    color: var(--ani-info-text);
 }
 
 .fi-link:focus-visible {
