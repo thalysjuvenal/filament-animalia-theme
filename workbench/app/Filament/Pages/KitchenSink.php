@@ -4,9 +4,13 @@ namespace Workbench\App\Filament\Pages;
 
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -14,6 +18,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Callout;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -37,7 +42,11 @@ class KitchenSink extends Page
 
     public function mount(): void
     {
-        $this->data = ['invalid' => 'abc', 'billing' => 'yearly', 'billing_grouped' => 'yearly', 'plan' => 'basic', 'news' => true, 'notifications' => true];
+        $this->data = ['invalid' => 'abc', 'billing' => 'yearly', 'billing_grouped' => 'yearly', 'plan' => 'basic', 'news' => true, 'notifications' => true,
+            'items' => [['title' => 'Primeiro item'], ['title' => 'Segundo item']],
+            'blocks' => [['type' => 'text', 'data' => ['body' => 'Bloco de texto']]],
+            'meta' => [['key' => 'cor', 'value' => 'azul'], ['key' => 'tamanho', 'value' => 'médio']],
+        ];
 
         $this->addError('data.invalid', 'Valor inválido');
     }
@@ -136,6 +145,22 @@ class KitchenSink extends Page
                                 TextInput::make('contact_email')->label('E-mail'),
                                 TextInput::make('contact_phone')->label('Telefone'),
                             ]),
+                    ]),
+                Section::make('Estruturas')
+                    ->schema([
+                        Repeater::make('items')
+                            ->label('Itens')
+                            ->schema([TextInput::make('title')->label('Título')])
+                            ->addActionLabel('Adicionar item'),
+                        Builder::make('blocks')
+                            ->label('Blocos')
+                            ->blocks([
+                                Block::make('text')->label('Texto')->schema([TextInput::make('body')->label('Conteúdo')]),
+                            ])
+                            ->addActionLabel('Adicionar bloco'),
+                        KeyValue::make('meta')->label('Metadados'),
+                        Callout::make('Pedido aprovado')->description('O pagamento foi confirmado.')->success(),
+                        Callout::make('Falha no envio')->description('Não foi possível enviar o e-mail.')->danger(),
                     ]),
             ]);
     }

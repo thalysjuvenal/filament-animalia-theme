@@ -173,3 +173,54 @@ input[type='radio'].fi-radio-input:disabled {
 .fi-fo-field-wrp-error-message {
     color: var(--ani-danger-text);
 }
+
+/*
+ * Repeater, builder and key-value: same card edge as sections (ring neutralised, hairline
+ * border, container radius, surface background) and no shadow, like the fields around them.
+ * A not-contained builder draws no card, so it is excluded. The key-value table is drawn
+ * inside an input wrapper, which keeps its input border, focus and invalid states and only
+ * takes the container radius.
+ */
+.fi-fo-repeater-item,
+.fi-fo-builder:not(.fi-fo-builder-not-contained) > .fi-fo-builder-items > .fi-fo-builder-item {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface);
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: none;
+}
+
+.fi-fo-repeater-item-has-header > .fi-fo-repeater-item-content,
+.fi-fo-builder-item-has-header > .fi-fo-builder-item-content {
+    border-block-start-color: var(--ani-border);
+}
+
+.fi-fo-repeater-item-header-label,
+.fi-fo-builder-item-header-label {
+    color: var(--ani-text);
+    font-weight: 600;
+}
+
+.fi-fo-repeater-label-between-items-divider-before,
+.fi-fo-repeater-label-between-items-divider-after,
+.fi-fo-builder-label-between-items-divider-before,
+.fi-fo-builder-label-between-items-divider-after {
+    border-color: var(--ani-border);
+}
+
+.fi-input-wrp.fi-fo-key-value {
+    border-radius: var(--ani-radius-container);
+    overflow: hidden;
+}
+
+.fi-fo-key-value .fi-fo-key-value-table-ctn,
+.fi-fo-key-value .fi-fo-key-value-table,
+.fi-fo-key-value .fi-fo-key-value-table > tbody,
+.fi-fo-key-value .fi-fo-key-value-table > tbody > tr {
+    border-color: var(--ani-border);
+}
+
+.fi-fo-key-value .fi-fo-key-value-table > thead > tr > th {
+    color: var(--ani-text);
+    font-weight: 600;
+}

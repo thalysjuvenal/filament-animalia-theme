@@ -105,3 +105,60 @@
 .fi-loading-indicator:not(:where(.fi-btn, .fi-link, .fi-icon-btn, .fi-badge) *) {
     color: var(--ani-primary);
 }
+
+/*
+ * Callout (Filament's alert): a bordered card like the toast. Filament marks a coloured
+ * callout with `fi-color` + `fi-color-{name}` (`->success()` and the other statuses are
+ * resolved to a colour); a gray or uncoloured callout gets no colour class and no accent.
+ * Only the status colors are restyled, other colors keep Filament's tint.
+ */
+.fi-callout {
+    --tw-ring-shadow: 0 0 transparent;
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: none;
+}
+
+.fi-callout:not(.fi-color) {
+    background-color: var(--ani-surface);
+}
+
+.fi-callout.fi-color-success {
+    background-color: var(--ani-success-bg);
+    border-inline-start: 4px solid var(--ani-success-text);
+}
+
+.fi-callout.fi-color-danger {
+    background-color: var(--ani-danger-bg);
+    border-inline-start: 4px solid var(--ani-danger-text);
+}
+
+.fi-callout.fi-color-warning {
+    background-color: var(--ani-warning-bg);
+    border-inline-start: 4px solid var(--ani-warning-text);
+}
+
+.fi-callout.fi-color-info {
+    background-color: var(--ani-info-bg);
+    border-inline-start: 4px solid var(--ani-info-text);
+}
+
+.fi-callout:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info) .fi-callout-heading {
+    font-weight: 600;
+}
+
+.fi-callout.fi-color-success :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-success-text);
+}
+
+.fi-callout.fi-color-danger :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-danger-text);
+}
+
+.fi-callout.fi-color-warning :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-warning-text);
+}
+
+.fi-callout.fi-color-info :is(.fi-callout-heading, .fi-callout-description, .fi-callout-icon) {
+    color: var(--ani-info-text);
+}
