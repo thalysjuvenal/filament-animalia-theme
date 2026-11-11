@@ -1,0 +1,95 @@
+/*
+ * AnimaliaDS restyle group: tables and pagination.
+ *
+ * Unlayered on purpose (Filament's styles live in cascade layers). Filament draws
+ * the container border and the pagination group border with box-shadow rings, so
+ * they are neutralized where a real border is drawn. Layout (display, position,
+ * width) is left to Filament.
+ */
+
+.fi-ta-ctn {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface);
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-sm);
+}
+
+/* Header cells: sort buttons inherit text-transform and font from the cell, so the label and icons are untouched. */
+.fi-ta-header-cell {
+    color: var(--ani-text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.fi-ta-header-cell .fi-ta-header-cell-sort-btn {
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+}
+
+/* Data cells only: action, selection, reorder and summary cells keep Filament's own padding. */
+.fi-ta-cell:where(
+        :not(
+            :has(.fi-ta-actions, .fi-ta-record-checkbox, .fi-ta-reorder-handle),
+            .fi-ta-selection-cell,
+            .fi-ta-group-selection-cell,
+            .fi-ta-summary-row-heading-cell,
+            .fi-ta-summary-header-cell,
+            .fi-ta-individual-search-cell
+        )
+    ) {
+    padding-block: var(--ani-space-cell-y);
+    padding-inline: var(--ani-space-cell-x);
+}
+
+/* The cell owns the padding now; Filament's column wrappers would add their own on top of it. */
+.fi-ta-cell
+    :where(
+        .fi-ta-text,
+        .fi-ta-icon,
+        .fi-ta-image,
+        .fi-ta-color,
+        .fi-ta-checkbox,
+        .fi-ta-toggle,
+        .fi-ta-select,
+        .fi-ta-text-input
+    ):where(:not(.fi-inline)) {
+    padding: 0;
+}
+
+.fi-ta-row:hover {
+    background-color: var(--ani-row-hover-bg);
+}
+
+.fi-ta-row.fi-selected,
+.fi-ta-row.fi-selected:hover {
+    background-color: var(--ani-row-selected-bg);
+}
+
+/* Pagination: the items group draws its own border instead of a ring. */
+.fi-pagination .fi-pagination-items {
+    --tw-ring-shadow: 0 0 transparent;
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-control);
+}
+
+.fi-pagination .fi-pagination-item:first-of-type .fi-pagination-item-btn {
+    border-start-start-radius: var(--ani-radius-control);
+    border-end-start-radius: var(--ani-radius-control);
+}
+
+.fi-pagination .fi-pagination-item:last-of-type .fi-pagination-item-btn {
+    border-start-end-radius: var(--ani-radius-control);
+    border-end-end-radius: var(--ani-radius-control);
+}
+
+.fi-pagination .fi-pagination-item.fi-active .fi-pagination-item-btn {
+    background-color: var(--ani-primary);
+}
+
+.fi-pagination .fi-pagination-item.fi-active .fi-pagination-item-label {
+    color: var(--ani-on-primary);
+}
