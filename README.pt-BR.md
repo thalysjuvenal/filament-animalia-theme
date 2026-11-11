@@ -139,11 +139,11 @@ Layouts da direita para a esquerda são suportados. Os estilos usam somente prop
 
 | Ambiente | Filament 4 | Filament 5 |
 |---|---|---|
-| PHP 8.2 (CI: Pint, PHPStan, Pest) | sim | sim |
-| PHP 8.4 (CI: Pint, PHPStan, Pest) | sim | sim |
-| PHP 8.4 (CI: regressão visual com Playwright) | sim | sim |
+| PHP 8.2 (CI: Pint, PHPStan, Pest) | na matriz de CI | na matriz de CI |
+| PHP 8.4 (CI: Pint, PHPStan, Pest) | na matriz de CI | na matriz de CI |
+| PHP 8.4 (CI: regressão visual com Playwright) | na matriz de CI | na matriz de CI |
 
-O CI (`.github/workflows/tests.yml`, `.github/workflows/visual.yml`) instala a versão mais recente que satisfaz `^4.0` e `^5.0`. As execuções locais de desenvolvimento usaram PHP 8.4 com Filament 5.11.2 e Filament 4.16.2. Outras combinações são permitidas pelo `composer.json`, mas não são exercitadas.
+A tabela lista o que os workflows de CI cobrem; consulte o status de CI do repositório para os resultados atuais. O CI (`.github/workflows/tests.yml`, `.github/workflows/visual.yml`) instala a versão mais recente que satisfaz `^4.0` e `^5.0`. As execuções locais de desenvolvimento usaram PHP 8.4 com Filament 5.11.2 e Filament 4.16.2. Outras combinações são permitidas pelo `composer.json`, mas não são exercitadas.
 
 ## Créditos
 

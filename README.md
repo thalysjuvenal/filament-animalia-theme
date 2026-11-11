@@ -139,11 +139,11 @@ Right-to-left layouts are supported. The stylesheets use CSS logical properties 
 
 | Environment | Filament 4 | Filament 5 |
 |---|---|---|
-| PHP 8.2 (CI: Pint, PHPStan, Pest) | yes | yes |
-| PHP 8.4 (CI: Pint, PHPStan, Pest) | yes | yes |
-| PHP 8.4 (CI: Playwright visual regression) | yes | yes |
+| PHP 8.2 (CI: Pint, PHPStan, Pest) | in CI matrix | in CI matrix |
+| PHP 8.4 (CI: Pint, PHPStan, Pest) | in CI matrix | in CI matrix |
+| PHP 8.4 (CI: Playwright visual regression) | in CI matrix | in CI matrix |
 
-CI (`.github/workflows/tests.yml`, `.github/workflows/visual.yml`) installs the latest release matching `^4.0` and `^5.0`. Local development runs used PHP 8.4 with Filament 5.11.2 and Filament 4.16.2. Other combinations are allowed by `composer.json` but not exercised.
+The table lists what the CI workflows cover; check the repository's CI status for current results. CI (`.github/workflows/tests.yml`, `.github/workflows/visual.yml`) installs the latest release matching `^4.0` and `^5.0`. Local development runs used PHP 8.4 with Filament 5.11.2 and Filament 4.16.2. Other combinations are allowed by `composer.json` but not exercised.
 
 ## Credits
 
