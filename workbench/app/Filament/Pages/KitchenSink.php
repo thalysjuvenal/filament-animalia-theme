@@ -99,6 +99,12 @@ class KitchenSink extends Page
                         Tab::make('Geral')->schema([Text::make('Conteúdo da aba geral')]),
                         Tab::make('Avançado')->schema([Text::make('Conteúdo da aba avançada')]),
                     ]),
+                Tabs::make('Abas verticais')
+                    ->vertical()
+                    ->tabs([
+                        Tab::make('Perfil')->schema([Text::make('Conteúdo da aba perfil')]),
+                        Tab::make('Segurança')->schema([Text::make('Conteúdo da aba segurança')]),
+                    ]),
                 Wizard::make([
                     Step::make('Passo 1')->schema([TextInput::make('wizard_name')->label('Título')]),
                     Step::make('Passo 2')->schema([Textarea::make('wizard_notes')->label('Detalhes')]),
