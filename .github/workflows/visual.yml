@@ -13,12 +13,14 @@ on:
 
 jobs:
   visual:
-    name: Visual / Filament ${{ matrix.filament }}
+    name: Visual / Filament ${{ matrix.major }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        filament: ['^4.0', '^5.0']
+        include:
+          - { filament: '^4.0', major: '4' }
+          - { filament: '^5.0', major: '5' }
 
     steps:
       - uses: actions/checkout@v4
@@ -54,17 +56,17 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
         run: npm run visual:update
 
-      - name: Upload Playwright report
+      - name: Upload visual diffs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-filament-${{ strategy.job-index }}
-          path: playwright-report/
-          if-no-files-found: ignore
+          name: visual-diffs-filament-${{ matrix.major }}
+          path: test-results/
+          if-no-files-found: warn
 
       - name: Upload updated baselines
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_snapshots }}
         uses: actions/upload-artifact@v4
         with:
-          name: visual-baselines-filament-${{ strategy.job-index }}
+          name: visual-baselines-filament-${{ matrix.major }}
           path: tests/Browser/__screenshots__/

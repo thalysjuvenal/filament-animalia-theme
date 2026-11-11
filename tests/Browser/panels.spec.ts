@@ -51,6 +51,8 @@ test.describe('admin overlays', () => {
 
         await page.goto('/admin/login');
         await settle(page);
+        // Filament autofocuses the email field: wait for it so the focus ring is always in the shot.
+        await expect(page.locator('input[type="email"]')).toBeFocused();
 
         await expect(page).toHaveScreenshot('admin-login.png', { fullPage: true });
         await context.close();
@@ -63,6 +65,8 @@ test.describe('admin overlays', () => {
 
         const modal = page.locator('.fi-modal-window');
         await expect(modal).toBeVisible();
+        // Filament's focus trap autofocuses the first field (Motivo): wait for it so the focus ring is always in the shot.
+        await expect(modal.locator('input').first()).toBeFocused();
         await settle(page);
 
         await expect(modal).toHaveScreenshot('admin-modal.png');
