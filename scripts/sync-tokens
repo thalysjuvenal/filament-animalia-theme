@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+use ThalysJuvenal\FilamentAnimalia\Scripts\SyncTokens;
+
+$root = dirname(__DIR__);
+
+require $root.'/vendor/autoload.php';
+
+$options = getopt('', ['brand:', 'design-tokens:', 'target::']);
+
+if (empty($options['brand']) || empty($options['design-tokens'])) {
+    fwrite(STDERR, "Usage: php scripts/sync-tokens --brand=PATH --design-tokens=PATH [--target=resources/tokens/animalia.php]\n");
+    exit(1);
+}
+
+$target = $options['target'] ?? 'resources/tokens/animalia.php';
+
+if (! str_starts_with($target, '/')) {
+    $target = $root.'/'.$target;
+}
+
+try {
+    (new SyncTokens($options['brand'], $options['design-tokens']))->write($target);
+} catch (RuntimeException $e) {
+    fwrite(STDERR, $e->getMessage()."\n");
+    exit(1);
+}
+
+fwrite(STDOUT, "Tokens written to {$target}\n");
