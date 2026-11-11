@@ -28,7 +28,8 @@ export default defineConfig({
     reporter: [['list']],
     snapshotPathTemplate: `tests/Browser/__screenshots__/filament-${major}/{projectName}/{arg}{ext}`,
     expect: {
-        toHaveScreenshot: { maxDiffPixels: 50, animations: 'disabled' },
+        // Per-pixel YIQ tolerance: Playwright's default 0.2 lets dark-on-dark changes slip through.
+        toHaveScreenshot: { maxDiffPixels: 50, threshold: 0.05, animations: 'disabled' },
     },
     webServer: {
         command: 'php vendor/bin/testbench serve --host=0.0.0.0 --port=8123',
