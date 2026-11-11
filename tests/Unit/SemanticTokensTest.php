@@ -8,7 +8,7 @@ use ThalysJuvenal\FilamentAnimalia\Tokens\SemanticTokens;
 it('defines the same token names for light and dark', function (SidebarVariant $v) {
     $c = SemanticTokens::colors($v);
     expect(array_keys($c['light']))->toEqual(array_keys($c['dark']));
-})->with(SidebarVariant::cases());
+})->with(fn (): array => SidebarVariant::cases());
 
 it('only references Animalia anchor shades', function (SidebarVariant $v) {
     $anchors = [50, 200, 400, 600, 700, 800, 950];
@@ -22,7 +22,7 @@ it('only references Animalia anchor shades', function (SidebarVariant $v) {
             expect((int) $shade)->toBeIn($color === 'gray' ? $grayAnchors : $anchors);
         }
     }
-})->with(SidebarVariant::cases());
+})->with(fn (): array => SidebarVariant::cases());
 
 it('uses the deep-indigo sidebar with a dark-mode border', function () {
     $c = SemanticTokens::colors(SidebarVariant::DeepIndigo);
