@@ -9,7 +9,10 @@ require $root.'/vendor/autoload.php';
 
 $options = getopt('', ['brand:', 'design-tokens:', 'target::']);
 
-if (empty($options['brand']) || empty($options['design-tokens'])) {
+$valid = static fn ($value): bool => is_string($value) && $value !== '';
+
+if (! $valid($options['brand'] ?? null) || ! $valid($options['design-tokens'] ?? null)
+    || (array_key_exists('target', $options) && ! $valid($options['target']))) {
     fwrite(STDERR, "Usage: php scripts/sync-tokens --brand=PATH --design-tokens=PATH [--target=resources/tokens/animalia.php]\n");
     exit(1);
 }

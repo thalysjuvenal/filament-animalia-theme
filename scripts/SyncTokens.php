@@ -7,6 +7,12 @@ use RuntimeException;
 /**
  * Regenerates resources/tokens/animalia.php from local clones of the
  * upstream AnimaliaDS repositories (Style Dictionary JSON files).
+ *
+ * build() reads only an explicit allowlist of upstream files and keys. New
+ * upstream files or token families are ignored until they are added here.
+ * New keys inside the known files do flow into the output, so they show up
+ * in `git diff`. `shadow.none` is excluded on purpose because the vendored
+ * file omits it.
  */
 class SyncTokens
 {
@@ -26,8 +32,15 @@ class SyncTokens
         $design = fn (string $file): array => $this->read($this->designTokensPath, "src/{$file}.json");
 
         $neutral = [];
+        $origin = [];
         foreach (['light', 'mid', 'dark'] as $tone) {
-            $neutral += $this->leaves($brand("neutral/{$tone}"), ['color', 'neutral', $tone]);
+            foreach ($this->leaves($brand("neutral/{$tone}"), ['color', 'neutral', $tone]) as $key => $value) {
+                if (isset($origin[$key])) {
+                    throw new RuntimeException("Neutral key \"{$key}\" is defined in both {$origin[$key]}.json and {$tone}.json.");
+                }
+                $origin[$key] = $tone;
+                $neutral[$key] = $value;
+            }
         }
 
         $color = [
@@ -156,16 +169,31 @@ class SyncTokens
 
     private function revision(string $path): string
     {
-        $output = [];
-        $status = 1;
-        exec('git -C '.escapeshellarg($path).' rev-parse HEAD 2>/dev/null', $output, $status);
+        $git = 'git -C '.escapeshellarg($path);
 
-        $sha = trim($output[0] ?? '');
-
-        if ($status !== 0 || $sha === '') {
-            throw new RuntimeException("Could not resolve git revision for: {$path}");
+        $top = $this->git("{$git} rev-parse --show-toplevel", $path, 'not a git repository');
+        $real = realpath($path);
+        if ($real === false || realpath($top) !== $real) {
+            throw new RuntimeException("Path is not the repository top level: {$path}");
         }
 
-        return $sha;
+        if ($this->git("{$git} status --porcelain", $path, 'could not read git status') !== '') {
+            throw new RuntimeException("Working tree is not clean: {$path}");
+        }
+
+        return $this->git("{$git} rev-parse HEAD", $path, 'could not resolve HEAD');
+    }
+
+    private function git(string $command, string $path, string $reason): string
+    {
+        $output = [];
+        $status = 1;
+        exec($command.' 2>/dev/null', $output, $status);
+
+        if ($status !== 0) {
+            throw new RuntimeException("Could not resolve git revision for: {$path} ({$reason})");
+        }
+
+        return trim(implode("\n", $output));
     }
 }
