@@ -59,6 +59,7 @@ class KitchenSink extends Page
             Action::make('danger')->label('Perigo')->color('danger'),
             Action::make('dangerSecondary')->label('Perigo secundário')->color('danger')->outlined(),
             Action::make('successSecondary')->label('Sucesso secundário')->color('success')->outlined(),
+            Action::make('customSecondary')->label('Marca secundária')->color('secondary')->outlined()->icon(Heroicon::Star),
             Action::make('cancel')->label('Cancelar')->color('gray'),
             Action::make('modal')
                 ->label('Abrir modal')

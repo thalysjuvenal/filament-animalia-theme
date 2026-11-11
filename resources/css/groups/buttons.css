@@ -167,7 +167,16 @@
 
 /* Any other outlined colour (the plugin's secondary, custom colours) gets Filament's own shade for the border. */
 .fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) {
-    border-color: var(--color-600);
+    border-color: var(--color-700);
+}
+
+/* Filament paints this icon shade 600 (light), which fails 3:1 for pale palettes such as secondary; 700 passes. */
+.fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) > .fi-icon {
+    color: var(--color-700);
+}
+
+.dark .fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) > .fi-icon {
+    color: var(--color-400);
 }
 
 .dark .fi-btn.fi-outlined.fi-color:where(:not(.fi-color-primary, .fi-color-danger, .fi-color-success, .fi-color-warning, .fi-color-info, .fi-color-gray)) {

@@ -88,6 +88,21 @@ input[type='radio'].fi-radio-input.fi-invalid {
     border-color: var(--ani-danger-text);
 }
 
+/* Dark mode: danger-text is a pale tint (shade 200), near-white as a 1px border; the 400 fill reads as red. */
+.dark .fi-input-wrp.fi-invalid,
+.dark .fi-input-wrp:where(:not(.fi-disabled, :has(.fi-input-wrp-actions :focus))).fi-invalid:focus-within {
+    border-color: var(--ani-danger);
+}
+
+.dark .fi-input-wrp:where(:not(.fi-disabled, :has(.fi-input-wrp-actions :focus))).fi-invalid:focus-within {
+    outline-color: var(--ani-danger);
+}
+
+.dark input[type='checkbox'].fi-checkbox-input.fi-invalid,
+.dark input[type='radio'].fi-radio-input.fi-invalid {
+    border-color: var(--ani-danger);
+}
+
 input[type='checkbox'].fi-checkbox-input:disabled,
 input[type='radio'].fi-radio-input:disabled {
     background-color: var(--ani-disabled-bg);
