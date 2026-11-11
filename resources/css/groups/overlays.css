@@ -10,6 +10,7 @@
 
 .fi-modal-window {
     background-color: var(--ani-surface-raised);
+    border: 1px solid var(--ani-border);
     box-shadow: var(--ani-shadow-xl);
 }
 
@@ -57,6 +58,12 @@
 .fi-dropdown-list-item:not(.fi-disabled):not([disabled]):hover,
 .fi-dropdown-list-item:not(.fi-disabled):not([disabled]):focus-visible {
     background-color: var(--ani-row-hover-bg);
+}
+
+/* Filament removes the outline on items, so keyboard focus needs its own indicator. */
+.fi-dropdown-list-item:focus-visible {
+    outline: 2px solid var(--ani-focus-ring);
+    outline-offset: -2px;
 }
 
 /*

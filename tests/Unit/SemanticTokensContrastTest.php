@@ -75,9 +75,10 @@ function semanticContrastPairs(): array
     $add('sidebar-item-active-text', 'sidebar-item-active-bg', 4.5);
     $add('sidebar-text', 'sidebar-item-hover-bg', 4.5);
 
-    $add('border-input', 'surface', 3.0);
-    $add('focus-ring', 'surface', 3.0);
-    $add('focus-ring', 'page-bg', 3.0);
+    foreach (['surface', 'surface-raised', 'page-bg'] as $bg) {
+        $add('border-input', $bg, 3.0);
+        $add('focus-ring', $bg, 3.0);
+    }
 
     return $pairs;
 }
@@ -107,4 +108,23 @@ it('meets WCAG contrast thresholds for every semantic pair', function (SidebarVa
     }
 
     expect($failures)->toBe([], "Contrast failures:\n".implode("\n", $failures));
+})->with($combinations);
+
+it('keeps Filament inner text and icons readable on the raised surface', function (SidebarVariant $variant, string $mode) {
+    $tokens = SemanticTokens::colors($variant)[$mode];
+    $raised = resolveSemanticColor($tokens['surface-raised']);
+
+    // Filament's own muted text and icon grays, as it paints them inside modals, dropdowns and toasts
+    // (text-gray-500 / dark:text-gray-400, text-gray-400 / dark:text-gray-500). Light mode keeps a white
+    // raised surface, the same as Filament, so these pairs are asserted too and pass with margin.
+    [$mutedShade, $iconShade] = $mode === 'light' ? ['gray-500', 'gray-400'] : ['gray-400', 'gray-500'];
+
+    expect(Contrast::ratio(resolveSemanticColor($mutedShade), $raised))->toBeGreaterThanOrEqual(4.5)
+        ->and(Contrast::ratio(resolveSemanticColor($iconShade), $raised))->toBeGreaterThanOrEqual(3.0);
+})->with($combinations);
+
+it('keeps the hover/focus row background distinct from the raised surface', function (SidebarVariant $variant, string $mode) {
+    $tokens = SemanticTokens::colors($variant)[$mode];
+
+    expect(resolveSemanticColor($tokens['row-hover-bg']))->not->toBe(resolveSemanticColor($tokens['surface-raised']));
 })->with($combinations);

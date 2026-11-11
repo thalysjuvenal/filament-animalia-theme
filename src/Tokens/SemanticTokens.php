@@ -71,7 +71,7 @@ final class SemanticTokens
             'surface-raised' => 'white',
             'border' => 'gray-100',
             'border-strong' => 'gray-200',
-            'border-input' => 'gray-400',
+            'border-input' => 'gray-500',
             'text' => 'gray-800',
             'text-muted' => 'gray-500',
             'primary' => 'primary-600',
@@ -117,7 +117,7 @@ final class SemanticTokens
         return [
             'page-bg' => 'gray-950',
             'surface' => 'gray-800',
-            'surface-raised' => 'gray-700',
+            'surface-raised' => 'gray-800',
             'border' => 'gray-700',
             'border-strong' => 'gray-600',
             'border-input' => 'gray-500',

@@ -11,6 +11,7 @@
 .fi-no-notification:not(.fi-inline) {
     --tw-ring-shadow: 0 0 transparent;
     background-color: var(--ani-surface-raised);
+    border: 1px solid var(--ani-border);
     border-radius: var(--ani-radius-container);
     box-shadow: var(--ani-shadow-lg);
 }
@@ -48,12 +49,8 @@
     padding-inline: 8px;
 }
 
-.fi-badge.fi-color-success,
-.fi-badge.fi-color-danger,
-.fi-badge.fi-color-warning,
-.fi-badge.fi-color-info,
-.fi-badge.fi-color-primary,
-.fi-badge.fi-color-gray {
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary),
+.fi-badge:not(.fi-color) {
     --tw-ring-shadow: 0 0 transparent;
 }
 
@@ -82,18 +79,14 @@
     color: var(--ani-primary-subtle-text);
 }
 
-.fi-badge.fi-color-gray {
+.fi-badge:not(.fi-color) {
     background-color: var(--ani-neutral-subtle-bg);
     color: var(--ani-neutral-subtle-text);
 }
 
 /* Badge icons follow the badge text color. */
-.fi-badge.fi-color-success .fi-icon,
-.fi-badge.fi-color-danger .fi-icon,
-.fi-badge.fi-color-warning .fi-icon,
-.fi-badge.fi-color-info .fi-icon,
-.fi-badge.fi-color-primary .fi-icon,
-.fi-badge.fi-color-gray .fi-icon {
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary) .fi-icon,
+.fi-badge:not(.fi-color) .fi-icon {
     color: inherit;
 }
 
@@ -102,12 +95,8 @@
  * It is not dimmed like Filament does, because dimming drops it below the 3:1 icon contrast on the
  * lightest badge backgrounds; the text pair is tested at 4.5:1 or more.
  */
-.fi-badge.fi-color-success .fi-badge-delete-btn-icon,
-.fi-badge.fi-color-danger .fi-badge-delete-btn-icon,
-.fi-badge.fi-color-warning .fi-badge-delete-btn-icon,
-.fi-badge.fi-color-info .fi-badge-delete-btn-icon,
-.fi-badge.fi-color-primary .fi-badge-delete-btn-icon,
-.fi-badge.fi-color-gray .fi-badge-delete-btn-icon {
+.fi-badge:is(.fi-color-success, .fi-color-danger, .fi-color-warning, .fi-color-info, .fi-color-primary) .fi-badge-delete-btn-icon,
+.fi-badge:not(.fi-color) .fi-badge-delete-btn-icon {
     color: inherit;
     opacity: 1;
 }

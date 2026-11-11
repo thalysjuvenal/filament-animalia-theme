@@ -91,4 +91,22 @@ test.describe('admin overlays', () => {
 
         await expect(panel).toHaveScreenshot('admin-dropdown.png');
     });
+
+    test('dropdown focus', async ({ page }) => {
+        await page.goto('/admin/kitchen-sink');
+        await settle(page);
+        await page.locator('main .fi-dropdown-trigger').first().click();
+
+        const panel = page.locator('main .fi-dropdown-panel:visible').first();
+        await expect(panel).toBeVisible();
+        await settle(page);
+
+        // Filament items use a roving tabindex (-1): ArrowDown from the open trigger focuses the first
+        // item, and the key press makes it :focus-visible.
+        await page.keyboard.press('ArrowDown');
+        await expect(panel.locator('.fi-dropdown-list-item').first()).toBeFocused();
+        await settle(page);
+
+        await expect(panel).toHaveScreenshot('admin-dropdown-focus.png');
+    });
 });
