@@ -60,6 +60,14 @@
     background-color: var(--ani-row-hover-bg);
 }
 
+/*
+ * Uncoloured item icons (no fi-color; Filament paints them gray-400 / gray-500) follow the muted text
+ * token at rest and on the hover/focus background. Coloured items keep Filament's colour.
+ */
+.fi-dropdown-list-item > .fi-icon:not(.fi-color) {
+    color: var(--ani-text-muted);
+}
+
 /* Filament removes the outline on items, so keyboard focus needs its own indicator. */
 .fi-dropdown-list-item:focus-visible {
     outline: 2px solid var(--ani-focus-ring);
