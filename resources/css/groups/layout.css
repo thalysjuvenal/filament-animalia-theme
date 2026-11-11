@@ -55,7 +55,7 @@
     padding-inline: var(--ani-space-section);
 }
 
-/* Dividers inside contained sections: header bottom, footer top and divided rows. */
+/* Dividers inside contained sections: header bottom, footer top and divided rows. The colour deliberately applies to every variant, compact and aside included: ruling 3 protects geometry (padding, radius), not colour, and one consistent hairline is the goal. */
 .fi-section:not(.fi-section-not-contained, .fi-aside).fi-section-has-header > .fi-section-content-ctn {
     border-block-start-color: var(--ani-border);
 }
@@ -100,6 +100,11 @@
     border: 1px solid var(--ani-border);
     border-radius: var(--ani-radius-container);
     box-shadow: var(--ani-shadow-sm);
+}
+
+/* The contained wizard's header divider; unlayered, so it also beats Filament's dark: variant. */
+.fi-sc-wizard.fi-contained .fi-sc-wizard-header {
+    border-block-end-color: var(--ani-border);
 }
 
 /* Contained fieldsets already use a real border; not-contained ones draw no box. */
