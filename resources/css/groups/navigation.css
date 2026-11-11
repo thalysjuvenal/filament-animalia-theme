@@ -149,15 +149,17 @@
 
 /*
  * Brand corner: on desktop the topbar segment above the sidebar is painted with the sidebar color, so
- * the brand reads as part of the sidebar. Backgrounds and borders only; no layout property is touched.
+ * the brand reads as part of the sidebar. Backgrounds and borders only, except the one logo offset in the
+ * collapsed state below.
  * Each sidebar state sets `--ani-corner-width` on the body (Filament's own width variables) and its own
  * brand colors; the single paint rule below consumes it. Where the variable is unset (mobile overlay,
  * top navigation, fully collapsible sidebar while closed) the gradients are invalid and nothing is
  * painted, so the normal topbar divider shows.
  * - Expanded: the corner spans the sidebar; the logo and the collapse button use the brand color.
- * - Collapsed rail (collapsible on desktop): the corner covers the rail and the expand button uses the
- *   brand color. Filament still shows the logo in the topbar, starting at about 4rem, so the corner is
- *   capped there: the logo stays on the light topbar with its default color and is never clipped.
+ * - Collapsed rail (collapsible on desktop): the corner spans the full rail so the dark column is one
+ *   straight edge, and the expand button uses the brand color. Filament still shows the logo in the
+ *   topbar, right after that button; it is pushed inline-start by 2.25rem so it clears the rail by 1rem
+ *   and stays on the light topbar with its default color.
  * The topbar divider follows the sidebar border color over the corner.
  */
 @media (min-width: 64rem) {
@@ -187,7 +189,7 @@
             .fi-body-has-top-navigation,
             .fi-body-has-sidebar-fully-collapsible-on-desktop
         ):not(:has(.fi-sidebar-open)) {
-        --ani-corner-width: min(var(--sidebar-collapsed-width), 4rem);
+        --ani-corner-width: var(--sidebar-collapsed-width);
     }
 
     .fi-body.fi-body-has-navigation.fi-body-has-sidebar-collapsible-on-desktop:not(
@@ -196,6 +198,15 @@
         ):not(:has(.fi-sidebar-open))
         :is(.fi-topbar-open-collapse-sidebar-btn, .fi-topbar-open-collapse-sidebar-btn .fi-icon) {
         color: var(--ani-sidebar-brand);
+    }
+
+    .fi-body.fi-body-has-navigation.fi-body-has-sidebar-collapsible-on-desktop:not(
+            .fi-body-has-top-navigation,
+            .fi-body-has-sidebar-fully-collapsible-on-desktop
+        ):not(:has(.fi-sidebar-open))
+        .fi-topbar-start
+        .fi-logo {
+        margin-inline-start: 2.25rem;
     }
 
     .fi-topbar {
