@@ -56,7 +56,7 @@ final class AnimaliaTheme implements Plugin
 
     public function primaryColor(string $color): static
     {
-        if (! in_array($color, ['brand-01', 'brand-02'], true) && preg_match('/^#[0-9A-Fa-f]{6}$/', $color) !== 1) {
+        if (! in_array($color, ['brand-01', 'brand-02'], true) && preg_match('/^#[0-9A-Fa-f]{6}\z/', $color) !== 1) {
             throw new InvalidArgumentException("Invalid AnimaliaDS primary color [{$color}]. Use 'brand-01', 'brand-02' or a #RRGGBB hex.");
         }
 

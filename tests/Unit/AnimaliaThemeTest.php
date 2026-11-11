@@ -21,6 +21,7 @@ it('rejects invalid configuration', function (string $method, string $value) {
     AnimaliaTheme::make()->{$method}($value);
 })->with([
     'short hex' => ['primaryColor', '#12'],
+    'trailing newline' => ['primaryColor', "#123456\n"],
     'named color' => ['primaryColor', 'blue'],
     'sidebar' => ['sidebar', 'dark'],
     'density' => ['density', 'cozy'],
