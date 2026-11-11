@@ -14,6 +14,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -117,6 +118,17 @@ class KitchenSink extends Page
                         Text::make('Info')->badge()->color('info'),
                         Text::make('Rascunho')->badge()->color('gray'),
                         Text::make('Novo')->badge()->color('primary'),
+                    ]),
+                Section::make('Preferências')
+                    ->description('Seção lateral compacta')
+                    ->aside()
+                    ->compact()
+                    ->schema([
+                        Fieldset::make('Contato')
+                            ->schema([
+                                TextInput::make('contact_email')->label('E-mail'),
+                                TextInput::make('contact_phone')->label('Telefone'),
+                            ]),
                     ]),
             ]);
     }

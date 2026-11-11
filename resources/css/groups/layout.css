@@ -9,12 +9,15 @@
  * Filament's own padding. Layout (display, position, width) is left to Filament.
  */
 
-/* Card: a contained section that is not aside (aside draws its card on the content container). */
+/* Card: a contained section that is not aside (aside draws its card on the content container). Compact sections keep Filament's radius. */
 .fi-section:not(.fi-section-not-contained, .fi-aside) {
     --tw-ring-shadow: 0 0 transparent;
     border: 1px solid var(--ani-border);
-    border-radius: var(--ani-radius-container);
     box-shadow: var(--ani-shadow-sm);
+}
+
+.fi-section:not(.fi-section-not-contained, .fi-aside, .fi-compact) {
+    border-radius: var(--ani-radius-container);
 }
 
 /* Secondary sections keep Filament's tinted background. */
@@ -25,8 +28,11 @@
 .fi-section.fi-aside:not(.fi-section-not-contained) > .fi-section-content-ctn {
     --tw-ring-shadow: 0 0 transparent;
     border: 1px solid var(--ani-border);
-    border-radius: var(--ani-radius-container);
     box-shadow: var(--ani-shadow-sm);
+}
+
+.fi-section.fi-aside:not(.fi-section-not-contained, .fi-compact) > .fi-section-content-ctn {
+    border-radius: var(--ani-radius-container);
 }
 
 .fi-section.fi-aside:not(.fi-section-not-contained, .fi-secondary) > .fi-section-content-ctn {
@@ -40,6 +46,26 @@
 
 .fi-section:not(.fi-section-not-contained, .fi-compact, .fi-aside).fi-divided > .fi-section-content-ctn > .fi-section-content > * {
     padding: var(--ani-space-section);
+}
+
+/* Header and footer line up with the content padding in both densities (regular contained sections only). */
+.fi-section:not(.fi-section-not-contained, .fi-compact, .fi-aside) > .fi-section-header,
+.fi-section:not(.fi-section-not-contained, .fi-compact, .fi-aside) > .fi-section-content-ctn > .fi-section-footer {
+    padding-block: var(--ani-space-section);
+    padding-inline: var(--ani-space-section);
+}
+
+/* Dividers inside contained sections: header bottom, footer top and divided rows. */
+.fi-section:not(.fi-section-not-contained, .fi-aside).fi-section-has-header > .fi-section-content-ctn {
+    border-block-start-color: var(--ani-border);
+}
+
+.fi-section:not(.fi-section-not-contained) > .fi-section-content-ctn > .fi-section-footer {
+    border-block-start-color: var(--ani-border);
+}
+
+.fi-section:not(.fi-section-not-contained).fi-divided > .fi-section-content-ctn > .fi-section-content > * {
+    border-color: var(--ani-border);
 }
 
 .fi-section .fi-section-header-heading {
@@ -62,7 +88,18 @@
 .fi-header-heading {
     font-size: 2rem;
     font-weight: 700;
+    line-height: 1.25;
     letter-spacing: -0.015em;
+}
+
+/* Contained tabs and wizard are cards too; their inner tab and step styling belongs to navigation.css. */
+.fi-sc-tabs.fi-contained,
+.fi-sc-wizard.fi-contained {
+    --tw-ring-shadow: 0 0 transparent;
+    background-color: var(--ani-surface);
+    border: 1px solid var(--ani-border);
+    border-radius: var(--ani-radius-container);
+    box-shadow: var(--ani-shadow-sm);
 }
 
 /* Contained fieldsets already use a real border; not-contained ones draw no box. */
